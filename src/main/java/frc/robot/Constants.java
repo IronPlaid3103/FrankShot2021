@@ -45,5 +45,10 @@ public final class Constants {
         public static final int LOGO_RIGHT = 8;
         public static final int LEFT_STICK_BUTTON = 9;
         public static final int RIGHT_STICK_BUTTON = 10;
+
+    }
+
+    public final class IntakeConstants {
+        public static final int intakeMotor = 5;
     }
 }

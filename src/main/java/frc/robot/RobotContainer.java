@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeIn;
+import frc.robot.commands.IntakeStop;
 import frc.robot.commands.Robot_Drive;
 import frc.robot.subsystems.Drive_Train;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,6 +31,8 @@ public class RobotContainer {
 
   private final Drive_Train m_drivetrain = new Drive_Train();
   private final Joystick m_driver = new Joystick(0);
+  private final Joystick m_operator = new Joystick(1); 
+  private final Intake m_intake = new Intake(); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -34,6 +40,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
+    m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
   }
 
   /**
@@ -42,7 +49,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton intakeButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
+    intakeButton.whileHeld(new IntakeIn(m_intake)); 
+    
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
