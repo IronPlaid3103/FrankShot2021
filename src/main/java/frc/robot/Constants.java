@@ -18,7 +18,9 @@ public final class Constants {
         public static final int flDrive = 0;
         public static final int frDrive = 1;
         public static final int blDrive = 2;
-        public static final int brDrive = 3;     
+        public static final int brDrive = 3;  
+        
+        public static final double deadband = .1;
     }
 
     public final class JoystickConstants {

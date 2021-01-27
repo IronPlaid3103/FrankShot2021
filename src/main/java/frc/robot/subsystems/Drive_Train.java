@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -12,15 +13,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drive_Train extends SubsystemBase {
-  /** Creates a new Drive_Train. */
-  public Drive_Train() {}
-
-  private final WPI_TalonSRX _flDrive = new WPI_TalonSRX(Constants.DrivetrainConstants.flDrive);
-  private final WPI_TalonSRX _frDrive = new WPI_TalonSRX(Constants.DrivetrainConstants.frDrive);
-  private final WPI_TalonSRX _blDrive = new WPI_TalonSRX(Constants.DrivetrainConstants.blDrive);
-  private final WPI_TalonSRX _brDrive = new WPI_TalonSRX(Constants.DrivetrainConstants.brDrive);
+  private final CANSparkMax _flDrive = new CANSparkMax(Constants.DrivetrainConstants.flDrive, MotorType.kBrushless);
+  private final CANSparkMax _frDrive = new CANSparkMax(Constants.DrivetrainConstants.frDrive, MotorType.kBrushless);
+  private final CANSparkMax _blDrive = new CANSparkMax(Constants.DrivetrainConstants.blDrive, MotorType.kBrushless);
+  private final CANSparkMax _brDrive = new CANSparkMax(Constants.DrivetrainConstants.brDrive, MotorType.kBrushless);
 
   private final MecanumDrive _drive = new MecanumDrive(_flDrive, _frDrive, _blDrive, _brDrive);
+
+  /** Creates a new Drive_Train. */
+  public Drive_Train() {
+    _drive.setDeadband(Constants.DrivetrainConstants.deadband); 
+    //if mecanum drive doesnt work then add own deadband function
+  }
 
   public void teleopDrive(Joystick driver){
     double ySpeed = driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X);
