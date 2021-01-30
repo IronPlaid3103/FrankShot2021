@@ -60,5 +60,6 @@ public final class Constants {
 
     public final class ShooterConstants {
         public static final int shooterMotor = 7;
+        public static final double defaultVelocity = 4000;
     }
 }
