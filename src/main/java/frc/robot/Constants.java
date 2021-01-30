@@ -53,4 +53,8 @@ public final class Constants {
     public final class IntakeConstants {
         public static final int intakeMotor = 5;
     }
+
+    public final class HopperConstants {
+        public static final int hopperMotor = 6;
+    }
 }
