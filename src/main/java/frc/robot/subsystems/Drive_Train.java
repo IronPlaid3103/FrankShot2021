@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -18,6 +19,8 @@ public class Drive_Train extends SubsystemBase {
   private final CANSparkMax _blDrive = new CANSparkMax(Constants.DrivetrainConstants.blDrive, MotorType.kBrushless);
   private final CANSparkMax _brDrive = new CANSparkMax(Constants.DrivetrainConstants.brDrive, MotorType.kBrushless);
 
+  private final ADIS16470_IMU gyro = new ADIS16470_IMU();
+
   private final MecanumDrive _drive = new MecanumDrive(_flDrive, _frDrive, _blDrive, _brDrive);
 
   /** Creates a new Drive_Train. */
@@ -31,7 +34,7 @@ public class Drive_Train extends SubsystemBase {
     double xSpeed = driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y);
     double zRotation = driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X);
 
-    _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
+    _drive.driveCartesian(ySpeed, -xSpeed, zRotation, gyro.getAngle());
   }
 
   @Override

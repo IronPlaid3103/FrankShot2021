@@ -13,10 +13,13 @@ import frc.robot.commands.HopperStop;
 import frc.robot.commands.IntakeIn;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.Robot_Drive;
+import frc.robot.commands.ShooterGo;
+import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Drive_Train;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -37,6 +40,7 @@ public class RobotContainer {
   private final Joystick m_operator = new Joystick(1); 
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
+  private final Shooter m_shooter = new Shooter();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -46,6 +50,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
     m_hopper.setDefaultCommand(new HopperStop(m_hopper));
+    m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
   }
 
   /**
@@ -60,6 +65,9 @@ public class RobotContainer {
 
     JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.B);
     hopperButton.whileHeld(new HopperGo(m_hopper));
+
+    JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT);
+    shooterButton.whileHeld(new ShooterGo(m_shooter));
     
   }
 
