@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.HopperGo;
-import frc.robot.commands.HopperStop;
+import frc.robot.commands.HooperGo;
+import frc.robot.commands.HooperStop;
 import frc.robot.commands.IntakeIn;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.Robot_Drive;
@@ -17,7 +17,7 @@ import frc.robot.commands.ShooterGo;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Drive_Train;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Hoopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,7 +39,7 @@ public class RobotContainer {
   private final Joystick m_driver = new Joystick(0);
   private final Joystick m_operator = new Joystick(1); 
   private final Intake m_intake = new Intake();
-  private final Hopper m_hopper = new Hopper();
+  private final Hoopper m_hopper = new Hoopper();
   private final Shooter m_shooter = new Shooter();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -49,7 +49,7 @@ public class RobotContainer {
 
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
-    m_hopper.setDefaultCommand(new HopperStop(m_hopper));
+    m_hopper.setDefaultCommand(new HooperStop(m_hopper));
     m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
   }
 
@@ -64,7 +64,7 @@ public class RobotContainer {
     intakeButton.whileHeld(new IntakeIn(m_intake)); 
 
     JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.B);
-    hopperButton.whileHeld(new HopperGo(m_hopper));
+    hopperButton.whileHeld(new HooperGo(m_hopper));
 
     JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT);
     shooterButton.whileHeld(new ShooterGo(m_shooter));
