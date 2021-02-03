@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hoopper;
+import frc.robot.subsystems.Hopper;
 
 public class HooperStop extends CommandBase {
-  private final Hoopper _hopper;
+  private final Hopper _hopper;
 
   /** Creates a new HopperStop. */
-  public HooperStop(Hoopper hopper) {
+  public HooperStop(Hopper hopper) {
     _hopper = hopper;
     addRequirements(_hopper);
   }
