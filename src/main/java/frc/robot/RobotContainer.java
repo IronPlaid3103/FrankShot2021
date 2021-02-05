@@ -62,13 +62,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton intakeButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
+    JoystickButton intakeButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT);
     intakeButton.whileHeld(new IntakeIn(m_intake)); 
 
-    JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.B);
+    JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT);
     hopperButton.whileHeld(new HooperGo(m_hopper));
 
-    JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT);
+    JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
     shooterButton.whileHeld(new ShooterGo(m_shooter));
     
   }
