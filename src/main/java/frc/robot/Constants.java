@@ -15,10 +15,10 @@ package frc.robot;
 public final class Constants {
 
     public final class DrivetrainConstants {
-        public static final int flDrive = 0;
-        public static final int frDrive = 1;
-        public static final int blDrive = 2;
-        public static final int brDrive = 3;  
+        public static final int flDrive = 1;
+        public static final int frDrive = 2;
+        public static final int blDrive = 3;
+        public static final int brDrive = 4;  
         
         public static final double deadband = .1;
     }

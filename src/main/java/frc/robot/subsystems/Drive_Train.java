@@ -25,7 +25,7 @@ public class Drive_Train extends SubsystemBase {
 
   private final ADIS16470_IMU _gyro = new ADIS16470_IMU();
 
-  private final MecanumDrive _drive = new MecanumDrive(_flDrive, _frDrive, _blDrive, _brDrive);
+  private final MecanumDrive _drive = new MecanumDrive(_flDrive, _brDrive, _frDrive, _brDrive);
 
   public Encoder m_left_follower = new Encoder(1, 2); //dont know what ports
   public Encoder m_right_follower = new Encoder(1, 2);
@@ -36,6 +36,7 @@ public class Drive_Train extends SubsystemBase {
   /** Creates a new Drive_Train. */
   public Drive_Train() {
     _drive.setDeadband(Constants.DrivetrainConstants.deadband); 
+    _gyro.reset();
 
     m_left_follower.setDistancePerPulse(40); // dont know what distance per pulse is
     m_right_follower.setDistancePerPulse(40);
