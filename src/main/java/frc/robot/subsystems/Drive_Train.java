@@ -56,6 +56,11 @@ public class Drive_Train extends SubsystemBase {
 
   }
 
+  public void drive(double ySpeed, double xSpeed, double zRotation){
+    _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
+  }
+
+
   public void encoderReset(){
     m_right_follower.reset();
     m_left_follower.reset();

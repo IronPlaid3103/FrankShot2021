@@ -9,19 +9,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.HooperGo;
-import frc.robot.commands.HooperStop;
-import frc.robot.commands.IntakeIn;
-import frc.robot.commands.IntakeStop;
-import frc.robot.commands.Robot_Drive;
-import frc.robot.commands.ShooterGo;
-import frc.robot.commands.ShooterStop;
-import frc.robot.subsystems.Drive_Train;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -70,7 +59,9 @@ public class RobotContainer {
 
     JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
     shooterButton.whileHeld(new ShooterGo(m_shooter));
-    
+
+    JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.A);
+    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain));
   }
 
   /**
