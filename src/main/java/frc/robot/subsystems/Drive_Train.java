@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import javax.lang.model.util.ElementScanner6;
+
 import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -49,12 +51,19 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void teleopDrive(Joystick driver){
-    double ySpeed = driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X);
-    double xSpeed = driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y);
-    double zRotation = driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X);
+    double ySpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X));
+    double xSpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y));
+    double zRotation = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X));
 
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation, _gyro.getAngle());
 
+  }
+
+  private double applyDeadband(double value) {
+    if(Math.abs(value) < Constants.DrivetrainConstants.deadband )
+      return 0.0;
+    else
+      return (value - Math.copySign(Constants.DrivetrainConstants.deadband, value)) / (1 - Constants.DrivetrainConstants.deadband);
   }
 
   public void drive(double ySpeed, double xSpeed, double zRotation){
