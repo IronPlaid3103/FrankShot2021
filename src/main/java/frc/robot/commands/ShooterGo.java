@@ -25,7 +25,9 @@ public class ShooterGo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _shooter.shooterGo();
+    if (_shooter.isAtTargetRPM()){
+      _shooter.shoot();
+    }
   }
 
   // Called once the command ends or is interrupted.
