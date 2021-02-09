@@ -13,8 +13,6 @@ public class IntakeStop extends CommandBase {
   /** Creates a new IntakeStop. */
   public IntakeStop(Intake intake) {
     _intake = intake; 
-
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_intake);
   }
 

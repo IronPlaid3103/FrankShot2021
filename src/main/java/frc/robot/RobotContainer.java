@@ -35,13 +35,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
 
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
     m_hopper.setDefaultCommand(new HooperStop(m_hopper));
-    m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
+    // m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
   }
 
   /**

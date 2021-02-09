@@ -14,8 +14,7 @@ public class Hopper extends SubsystemBase {
   private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushless);
 
   /** Creates a new Hopper. */
-  public Hopper() {
-  }
+  public Hopper() {}
 
   public void stop() {
     _hopperMotor.stopMotor();

@@ -4,9 +4,8 @@
 
 package frc.robot.subsystems;
 
-import javax.lang.model.util.ElementScanner6;
-
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -29,15 +28,19 @@ public class Drive_Train extends SubsystemBase {
 
   private final MecanumDrive _drive = new MecanumDrive(_flDrive, _brDrive, _frDrive, _brDrive);
 
-  public Encoder m_left_follower = new Encoder(1, 2); //dont know what ports
-  public Encoder m_right_follower = new Encoder(1, 2);
+  //TODO: We want to use the encoders from the NEO/SparkMax - the motor controller objects above
+  //      have a method to get an encoder (.getEncoder()), but it returns a CANEncoder, so we need
+  //      to determine how to use that (the methods that replace it in all the code below)
+  public Encoder m_left_follower = new Encoder(1, 2);
+  public Encoder m_right_follower = new Encoder(3, 4);
 
   DifferentialDriveOdometry m_odometry;
 
-
   /** Creates a new Drive_Train. */
   public Drive_Train() {
-    _drive.setDeadband(Constants.DrivetrainConstants.deadband); 
+    //Note: the following doesn't seem to work, so we had to add our own deadband function
+    //_drive.setDeadband(Constants.DrivetrainConstants.deadband);
+
     _gyro.reset();
 
     m_left_follower.setDistancePerPulse(40); // dont know what distance per pulse is
@@ -45,8 +48,6 @@ public class Drive_Train extends SubsystemBase {
 
     encoderReset();
     
-    //if mecanum drive doesnt work then add own deadband function
-
     m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
   }
 
@@ -56,75 +57,73 @@ public class Drive_Train extends SubsystemBase {
     double zRotation = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X));
 
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation, _gyro.getAngle());
-
   }
 
   private double applyDeadband(double value) {
-    if(Math.abs(value) < Constants.DrivetrainConstants.deadband )
+    if(Math.abs(value) < Constants.DrivetrainConstants.deadband)
       return 0.0;
     else
       return (value - Math.copySign(Constants.DrivetrainConstants.deadband, value)) / (1 - Constants.DrivetrainConstants.deadband);
   }
 
-  public void drive(double ySpeed, double xSpeed, double zRotation){
+  public void drive(double ySpeed, double xSpeed, double zRotation) {
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
   }
 
-
-  public void encoderReset(){
+  public void encoderReset() {
     m_right_follower.reset();
     m_left_follower.reset();
   }
 
-  public Pose2d getPose(){
+  public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
-  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(m_left_follower.getRate(), m_right_follower.getRate());
   }
 
-  public void resetOdometry(Pose2d pose){
+  public void resetOdometry(Pose2d pose) {
     encoderReset();
     m_odometry.resetPosition(pose, _gyro.getRotation2d());
   }
 
-  public void arcadeDrive(double xDirection, double yDirection, double rotation){
+  public void arcadeDrive(double xDirection, double yDirection, double rotation) {
     _drive.driveCartesian(yDirection, xDirection, rotation);
   }
 
-  public void tankDriveVolts(double leftVolts, double rightVolts){
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
     _flDrive.setVoltage(leftVolts);
     _frDrive.setVoltage(rightVolts);
     _brDrive.setVoltage(rightVolts);
     _blDrive.setVoltage(leftVolts);
   }
 
-  public double getAverageEncoderDistance(){
+  public double getAverageEncoderDistance() {
     return ((m_left_follower.getDistance() + m_right_follower.getDistance()) /2);
   }
 
-  public Encoder getLeftEncoder(){
+  public Encoder getLeftEncoder() {
     return m_left_follower;
   }
 
-  public Encoder getRightEncoder(){
+  public Encoder getRightEncoder() {
     return m_right_follower;
   }
 
-  public void setMaxOutput(double maxOutput){
+  public void setMaxOutput(double maxOutput) {
     _drive.setMaxOutput(maxOutput);
   }
 
-  public void zeroHeading(){
+  public void zeroHeading() {
     _gyro.reset();
   }
 
-  public double getHeading(){
+  public double getHeading() {
     return _gyro.getRotation2d().getDegrees();
   }
 
-  public double getTurnRate(){
+  public double getTurnRate() {
     return -_gyro.getRate();
   }
 
@@ -132,6 +131,5 @@ public class Drive_Train extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_odometry.update(_gyro.getRotation2d(), m_left_follower.getDistance(), m_right_follower.getDistance());
-
   }
 }

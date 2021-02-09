@@ -13,8 +13,6 @@ public class ShooterStop extends CommandBase {
   /** Creates a new ShooterStop. */
   public ShooterStop(Shooter shooter) {
     _shooter = shooter;
-
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_shooter);
   }
 

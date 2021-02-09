@@ -13,8 +13,6 @@ public class ShooterGo extends CommandBase {
   /** Creates a new ShooterGo. */
   public ShooterGo(Shooter shooter) {
     _shooter = shooter;
-
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_shooter);
   }
 

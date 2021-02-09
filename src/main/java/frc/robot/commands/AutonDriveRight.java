@@ -4,14 +4,8 @@
 
 package frc.robot.commands;
 
-
-
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive_Train;
-import jdk.jfr.Threshold;
-import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutonDriveRight extends CommandBase {
@@ -21,7 +15,6 @@ public class AutonDriveRight extends CommandBase {
   /** Creates a new DriveRight. */
   public AutonDriveRight(Drive_Train drivetrain) {
     _drivetrain = drivetrain;
-
     addRequirements(_drivetrain);
   }
 
@@ -36,7 +29,6 @@ public class AutonDriveRight extends CommandBase {
   @Override
   public void execute() {
     _drivetrain.drive(0.5, 0, 0);
-
   }
 
   // Called once the command ends or is interrupted.

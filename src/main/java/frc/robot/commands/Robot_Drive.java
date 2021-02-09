@@ -18,7 +18,6 @@ public class Robot_Drive extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     _drivetrain = drivetrain;
     _joystick = joystick;
-
     addRequirements(_drivetrain);
   }
 
