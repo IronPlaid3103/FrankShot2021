@@ -57,7 +57,7 @@ public class RobotContainer {
     hopperButton.whileHeld(new HooperGo(m_hopper));
 
     JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
-    shooterButton.whileHeld(new ShooterGo(m_shooter));
+    shooterButton.whileHeld(new ShooterGo(m_shooter, m_hopper));
 
     JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.A);
     driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain));

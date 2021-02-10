@@ -5,15 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterGo extends CommandBase {
   private final Shooter _shooter;
+  private final Hopper _hopper;
 
   /** Creates a new ShooterGo. */
-  public ShooterGo(Shooter shooter) {
+  public ShooterGo(Shooter shooter, Hopper hopper) {
     _shooter = shooter;
     addRequirements(_shooter);
+    _hopper = hopper;
+    addRequirements(_hopper);
   }
 
   // Called when the command is initially scheduled.
@@ -23,8 +27,9 @@ public class ShooterGo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    _shooter.shoot();
     if (_shooter.isAtTargetRPM()){
-      _shooter.shoot();
+      _hopper.hopperGo();
     }
   }
 
