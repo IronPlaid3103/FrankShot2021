@@ -50,6 +50,7 @@ public class Drive_Train extends SubsystemBase {
     
     m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
   }
+  
 
   public void teleopDrive(Joystick driver){
     double ySpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X));
@@ -69,6 +70,8 @@ public class Drive_Train extends SubsystemBase {
   public void drive(double ySpeed, double xSpeed, double zRotation) {
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
   }
+
+
 
   public void encoderReset() {
     m_right_follower.reset();
