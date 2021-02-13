@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
 
 public class Drive_Train extends SubsystemBase {
   private final CANSparkMax _flDrive = new CANSparkMax(Constants.DrivetrainConstants.flDrive, MotorType.kBrushless);
@@ -50,6 +51,11 @@ public class Drive_Train extends SubsystemBase {
     encoderReset();
     
     m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
+
+    _flDrive.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _frDrive.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _blDrive.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _brDrive.setOpenLoopRampRate(DrivetrainConstants.rampRate);
   }
   
   public void teleopDrive(Joystick driver){

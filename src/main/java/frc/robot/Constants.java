@@ -32,6 +32,8 @@ public final class Constants {
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
         public static final double kPDriveVel = 8.5;
+
+        public static final double rampRate = 0.5;
     }
 
     public static final class AutoConstants{
