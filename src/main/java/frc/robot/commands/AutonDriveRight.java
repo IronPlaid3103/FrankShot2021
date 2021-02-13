@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive_Train;
 import edu.wpi.first.wpilibj.Timer;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class AutonDriveRight extends CommandBase {
   private final Drive_Train _drivetrain;
   private Timer _timer = new Timer();
+  private final ADIS16470_IMU _gyro = new ADIS16470_IMU();
+  private final double kP = 1;
 
   /** Creates a new DriveRight. */
   public AutonDriveRight(Drive_Train drivetrain) {
@@ -23,25 +26,27 @@ public class AutonDriveRight extends CommandBase {
   public void initialize() {
     _timer.reset();
     _timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _drivetrain.drive(0.5, 0, 0);
+    double error = -_gyro.getRate();
+    _drivetrain.drive(0.2, 0, 0 -kP * error);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _drivetrain.drive(0,0,0);
+    _drivetrain.drive(0, 0, 0);
     _timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(_timer.get() >= 5)
+    if (_timer.get() >= 5)
       return true;
     else
       return false;
