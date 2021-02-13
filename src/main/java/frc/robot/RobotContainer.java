@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -42,7 +44,8 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private final Drive_Train m_drivetrain = new Drive_Train();
+  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final Drive_Train m_drivetrain = new Drive_Train(m_gyro);
   private final Joystick m_driver = new Joystick(0);
   private final Joystick m_operator = new Joystick(1); 
   private final Intake m_intake = new Intake();
@@ -75,8 +78,8 @@ public class RobotContainer {
     JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
     shooterButton.whileHeld(new ShooterGo(m_shooter, m_hopper));
 
-    JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.A);
-    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain));
+    JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT);
+    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro));
   }
 
   /**

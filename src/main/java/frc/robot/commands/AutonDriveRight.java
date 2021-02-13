@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.Timer;
 public class AutonDriveRight extends CommandBase {
   private final Drive_Train _drivetrain;
   private Timer _timer = new Timer();
-  private final ADIS16470_IMU _gyro = new ADIS16470_IMU();
   private final double kP = 1;
+  private ADIS16470_IMU _gyro;
 
   /** Creates a new DriveRight. */
-  public AutonDriveRight(Drive_Train drivetrain) {
+  public AutonDriveRight(Drive_Train drivetrain, ADIS16470_IMU gyro) {
     _drivetrain = drivetrain;
+    _gyro = gyro;
     addRequirements(_drivetrain);
   }
 

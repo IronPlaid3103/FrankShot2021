@@ -24,9 +24,9 @@ public class Drive_Train extends SubsystemBase {
   private final CANSparkMax _blDrive = new CANSparkMax(Constants.DrivetrainConstants.blDrive, MotorType.kBrushless);
   private final CANSparkMax _brDrive = new CANSparkMax(Constants.DrivetrainConstants.brDrive, MotorType.kBrushless);
 
-  private final ADIS16470_IMU _gyro = new ADIS16470_IMU();
 
   private final MecanumDrive _drive = new MecanumDrive(_flDrive, _brDrive, _frDrive, _brDrive);
+  private ADIS16470_IMU _gyro;
 
   //TODO: We want to use the encoders from the NEO/SparkMax - the motor controller objects above
   //      have a method to get an encoder (.getEncoder()), but it returns a CANEncoder, so we need
@@ -37,10 +37,11 @@ public class Drive_Train extends SubsystemBase {
   DifferentialDriveOdometry m_odometry;
 
   /** Creates a new Drive_Train. */
-  public Drive_Train() {
+  public Drive_Train(ADIS16470_IMU gyro) {
     //Note: the following doesn't seem to work, so we had to add our own deadband function
     //_drive.setDeadband(Constants.DrivetrainConstants.deadband);
 
+    _gyro = gyro;
     _gyro.reset();
 
     m_left_follower.setDistancePerPulse(40); // dont know what distance per pulse is
@@ -51,7 +52,6 @@ public class Drive_Train extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
   }
   
-
   public void teleopDrive(Joystick driver){
     double ySpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X));
     double xSpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y));
@@ -70,8 +70,6 @@ public class Drive_Train extends SubsystemBase {
   public void drive(double ySpeed, double xSpeed, double zRotation) {
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
   }
-
-
 
   public void encoderReset() {
     m_right_follower.reset();
