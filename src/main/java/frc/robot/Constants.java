@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
 
     public static final class DrivetrainConstants {
-        public static final int flDrive = 1;
-        public static final int frDrive = 2;
-        public static final int blDrive = 3;
-        public static final int brDrive = 4;  
+        public static final int frontLeftMotor = 1;
+        public static final int frontRightMotor = 2;
+        public static final int rearLeftMotor = 3;
+        public static final int rearRightMotor = 4;  
         
         public static final double deadband = .1;
         public static final double ksVolts = 0.22;
