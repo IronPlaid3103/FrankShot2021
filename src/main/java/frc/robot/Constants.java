@@ -83,4 +83,13 @@ public final class Constants {
         public static final int shooterMotor = 7;
         public static final double defaultVelocity = 4000;
     }
+
+    public static final class FieldConstants {
+        public static final double targetHeight = 98.25;    //this might be 81.25 if measured to the bottom of the vision target
+    }
+
+    public static final class LimelightConstants {
+        public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
+        public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly
+    }
 }
