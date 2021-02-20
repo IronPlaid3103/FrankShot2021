@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.util.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -46,6 +47,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter();
+  private final Limelight m_limelight = new Limelight();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -72,8 +74,17 @@ public class RobotContainer {
     JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT);
     hopperButton.whileHeld(new HooperGo(m_hopper));
 
-    JoystickButton shooterButton = new JoystickButton(m_operator, Constants.JoystickConstants.A);
-    shooterButton.whileHeld(new ShooterGo(m_shooter, m_hopper));
+    JoystickButton shooterButton1 = new JoystickButton(m_operator, Constants.JoystickConstants.A);
+    shooterButton1.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.greenVelocity)); 
+
+    JoystickButton shooterButton2 = new JoystickButton(m_operator, Constants.JoystickConstants.Y);
+    shooterButton2.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.yellowVelocity));
+
+    JoystickButton shooterButton3 = new JoystickButton(m_operator, Constants.JoystickConstants.X);
+    shooterButton3.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.blueVelocity));
+
+    JoystickButton shooterButton4 = new JoystickButton(m_operator, Constants.JoystickConstants.B);
+    shooterButton4.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.redVelocity));
 
     JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT);
     driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro));

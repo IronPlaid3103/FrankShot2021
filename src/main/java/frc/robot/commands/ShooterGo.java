@@ -11,18 +11,22 @@ import frc.robot.subsystems.Shooter;
 public class ShooterGo extends CommandBase {
   private final Shooter _shooter;
   private final Hopper _hopper;
+  private double _targetRPM;
 
   /** Creates a new ShooterGo. */
-  public ShooterGo(Shooter shooter, Hopper hopper) {
+  public ShooterGo(Shooter shooter, Hopper hopper, double targetRPM) {
     _shooter = shooter;
     addRequirements(_shooter);
     _hopper = hopper;
     addRequirements(_hopper);
+    _targetRPM = targetRPM;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    _shooter.setTargetRPM(_targetRPM);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
