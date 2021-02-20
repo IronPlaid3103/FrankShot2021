@@ -23,7 +23,8 @@ public final class Constants {
         public static final int rearRightMotor = 4;  
         
         public static final double deadband = .1;
-        public static final double ksVolts = 0.22;
+
+        public static final double ksVolts = 0.22; //put everything with k in settings
         public static final double kvVoltSecondsPerMeter = 1.98;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
@@ -73,18 +74,22 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int intakeMotor = 5;
+        public static final double defaultPower = .5;
     }
 
     public static final class HopperConstants {
         public static final int hopperMotor = 6;
+        public static final double defaultPower = .5;
     }
 
     public static final class ShooterConstants {
         public static final int shooterMotor = 7;
-        public static final double greenVelocity = 4000;
-        public static final double yellowVelocity = 5000;
-        public static final double blueVelocity = 6000;
-        public static final double redVelocity = 7000;
+        public static double greenVelocity = 4000;
+        public static double yellowVelocity = 5000;
+        public static double blueVelocity = 6000;
+        public static double redVelocity = 7000;
+        public static final double kP = 0;
+        public static final double kF = 0;
     }
 
     public static final class FieldConstants {

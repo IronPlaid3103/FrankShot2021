@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.util.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -145,5 +146,19 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
+  }
+
+  public void loadSettings(){
+    m_intake.setPower(Settings.loadDouble("Intake", "Power", Constants.IntakeConstants.defaultPower));
+    m_hopper.setPower(Settings.loadDouble("Hopper", "Power", Constants.HopperConstants.defaultPower));
+    m_shooter.setKf(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.kF));
+    m_shooter.setKp(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.kP));
+  }
+
+  public void saveSettings(){
+    Settings.saveDouble("Intake", "Power", m_intake.getPower());
+    Settings.saveDouble("Hopper", "Power", m_hopper.getPower());
+    Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
+    Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
   }
 }
