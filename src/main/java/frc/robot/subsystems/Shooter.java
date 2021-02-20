@@ -14,7 +14,7 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   private final WPI_TalonFX _shooterMotor = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor);
-  private double _targetRPM = Constants.ShooterConstants.defaultVelocity;
+  private double _targetRPM;
 
   //TODO: move PIDF values to constants for a default, dashboard for user updates, and persist on the robot using Preferences (PIDF values 2020 code - RobotContainer)
   private double _kF = 10;

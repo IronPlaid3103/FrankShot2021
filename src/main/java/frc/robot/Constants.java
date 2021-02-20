@@ -81,7 +81,10 @@ public final class Constants {
 
     public static final class ShooterConstants {
         public static final int shooterMotor = 7;
-        public static final double defaultVelocity = 4000;
+        public static final double greenVelocity = 4000;
+        public static final double yellowVelocity = 5000;
+        public static final double blueVelocity = 6000;
+        public static final double redVelocity = 7000;
     }
 
     public static final class FieldConstants {
@@ -90,6 +93,6 @@ public final class Constants {
 
     public static final class LimelightConstants {
         public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
-        public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly
-    }
+        public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly   
+ }
 }
