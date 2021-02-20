@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.util.LIDARLiteV3;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -40,6 +41,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final LIDARLiteV3 m_lidar = new LIDARLiteV3(0,0);
   private final Drive_Train m_drivetrain = new Drive_Train(m_gyro);
   private final Joystick m_driver = new Joystick(0);
   private final Joystick m_operator = new Joystick(1); 
@@ -76,7 +78,7 @@ public class RobotContainer {
     shooterButton.whileHeld(new ShooterGo(m_shooter, m_hopper));
 
     JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT);
-    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro));
+    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
   }
 
   /**
