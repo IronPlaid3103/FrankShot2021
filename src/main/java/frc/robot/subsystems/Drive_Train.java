@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -15,18 +14,21 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.simulation.SimSparkMax;
 
 public class Drive_Train extends SubsystemBase {
-  private final CANSparkMax _flDrive = new CANSparkMax(Constants.DrivetrainConstants.flDrive, MotorType.kBrushless);
-  private final CANSparkMax _frDrive = new CANSparkMax(Constants.DrivetrainConstants.frDrive, MotorType.kBrushless);
-  private final CANSparkMax _blDrive = new CANSparkMax(Constants.DrivetrainConstants.blDrive, MotorType.kBrushless);
-  private final CANSparkMax _brDrive = new CANSparkMax(Constants.DrivetrainConstants.brDrive, MotorType.kBrushless);
+  private final CANSparkMax _frontLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax _frontRightMotor = new SimSparkMax(Constants.DrivetrainConstants.frontRightMotor, MotorType.kBrushless);
+  private final CANSparkMax _rearLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.rearLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax _rearRightMotor = new SimSparkMax(Constants.DrivetrainConstants.rearRightMotor, MotorType.kBrushless);
 
-  private final ADIS16470_IMU _gyro = new ADIS16470_IMU();
 
-  private final MecanumDrive _drive = new MecanumDrive(_flDrive, _brDrive, _frDrive, _brDrive);
+  private final MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
+  private ADIS16470_IMU _gyro;
 
   //TODO: We want to use the encoders from the NEO/SparkMax - the motor controller objects above
   //      have a method to get an encoder (.getEncoder()), but it returns a CANEncoder, so we need
@@ -37,10 +39,11 @@ public class Drive_Train extends SubsystemBase {
   DifferentialDriveOdometry m_odometry;
 
   /** Creates a new Drive_Train. */
-  public Drive_Train() {
+  public Drive_Train(ADIS16470_IMU gyro) {
     //Note: the following doesn't seem to work, so we had to add our own deadband function
     //_drive.setDeadband(Constants.DrivetrainConstants.deadband);
 
+    _gyro = gyro;
     _gyro.reset();
 
     m_left_follower.setDistancePerPulse(40); // dont know what distance per pulse is
@@ -49,9 +52,13 @@ public class Drive_Train extends SubsystemBase {
     encoderReset();
     
     m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
+
+    _frontLeftMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _frontRightMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _rearLeftMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    _rearRightMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
   }
   
-
   public void teleopDrive(Joystick driver){
     double ySpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_X));
     double xSpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y));
@@ -70,8 +77,6 @@ public class Drive_Train extends SubsystemBase {
   public void drive(double ySpeed, double xSpeed, double zRotation) {
     _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
   }
-
-
 
   public void encoderReset() {
     m_right_follower.reset();
@@ -96,10 +101,10 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    _flDrive.setVoltage(leftVolts);
-    _frDrive.setVoltage(rightVolts);
-    _brDrive.setVoltage(rightVolts);
-    _blDrive.setVoltage(leftVolts);
+    _frontLeftMotor.setVoltage(leftVolts);
+    _frontRightMotor.setVoltage(rightVolts);
+    _rearRightMotor.setVoltage(rightVolts);
+    _rearLeftMotor.setVoltage(leftVolts);
   }
 
   public double getAverageEncoderDistance() {
@@ -130,9 +135,14 @@ public class Drive_Train extends SubsystemBase {
     return -_gyro.getRate();
   }
 
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_odometry.update(_gyro.getRotation2d(), m_left_follower.getDistance(), m_right_follower.getDistance());
+    
+    double angle = _gyro.getAngle();
+    SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
   }
 }

@@ -17,13 +17,14 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
 
     public static final class DrivetrainConstants {
-        public static final int flDrive = 1;
-        public static final int frDrive = 2;
-        public static final int blDrive = 3;
-        public static final int brDrive = 4;  
+        public static final int frontLeftMotor = 1;
+        public static final int frontRightMotor = 2;
+        public static final int rearLeftMotor = 3;
+        public static final int rearRightMotor = 4;  
         
         public static final double deadband = .1;
-        public static final double ksVolts = 0.22;
+
+        public static final double ksVolts = 0.22; //put everything with k in settings
         public static final double kvVoltSecondsPerMeter = 1.98;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
@@ -32,6 +33,8 @@ public final class Constants {
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
         public static final double kPDriveVel = 8.5;
+
+        public static final double rampRate = 0.5;
     }
 
     public static final class AutoConstants{
@@ -71,14 +74,30 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int intakeMotor = 5;
+        public static final double defaultPower = .5;
     }
 
     public static final class HopperConstants {
         public static final int hopperMotor = 6;
+        public static final double defaultPower = .5;
     }
 
     public static final class ShooterConstants {
         public static final int shooterMotor = 7;
-        public static final double defaultVelocity = 4000;
+        public static double greenVelocity = 4000;
+        public static double yellowVelocity = 5000;
+        public static double blueVelocity = 6000;
+        public static double redVelocity = 7000;
+        public static final double kP = 0;
+        public static final double kF = 0;
     }
+
+    public static final class FieldConstants {
+        public static final double targetHeight = 98.25;    //this might be 81.25 if measured to the bottom of the vision target
+    }
+
+    public static final class LimelightConstants {
+        public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
+        public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly   
+ }
 }

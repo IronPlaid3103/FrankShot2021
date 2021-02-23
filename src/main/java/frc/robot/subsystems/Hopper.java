@@ -8,10 +8,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.HopperConstants;
 
 public class Hopper extends SubsystemBase {
   private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushless);
+  private double _power = Constants.HopperConstants.defaultPower;
 
   /** Creates a new Hopper. */
   public Hopper() {}
@@ -21,7 +23,15 @@ public class Hopper extends SubsystemBase {
   }
 
   public void hopperGo() {
-    _hopperMotor.set(0.5);
+    _hopperMotor.set(_power);
+  }
+
+  public void setPower(double power){
+    _power = power;
+  }
+
+  public double getPower(){
+    return _power;
   }
 
   @Override

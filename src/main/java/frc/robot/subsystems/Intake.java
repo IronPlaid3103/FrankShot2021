@@ -11,6 +11,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX _intakeMotor = new WPI_TalonSRX(Constants.IntakeConstants.intakeMotor);
+  private double _power = Constants.IntakeConstants.defaultPower;
   
   /** Creates a new Intake. */
   public Intake() {}
@@ -20,7 +21,15 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeIn() {
-    _intakeMotor.set(0.5); 
+    _intakeMotor.set(_power); 
+  }
+
+  public void setPower(double power){
+    _power = power;
+  }
+
+  public double getPower(){
+    return _power;
   }
 
   @Override
