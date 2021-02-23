@@ -1,0 +1,9 @@
+{
+  "lengthUnit": "Inch",
+  "exportUnit": "Same as Project",
+  "maxVelocity": 10.0,
+  "maxAcceleration": 10.0,
+  "wheelBase": 10.0,
+  "gameName": "Slalom Path",
+  "outputDir": ""
+}

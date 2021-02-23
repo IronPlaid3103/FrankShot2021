@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -49,6 +51,8 @@ public class RobotContainer {
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter();
 
+  private SendableChooser<String> m_ChallengeChooser = new SendableChooser<String>(); 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureButtonBindings();
@@ -57,6 +61,17 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
     m_hopper.setDefaultCommand(new HooperStop(m_hopper));
     // m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
+
+    //setting up SendableChooser
+    m_ChallengeChooser = new SendableChooser<>();
+    m_ChallengeChooser.setDefaultOption("Galactic Search", "Galactic Search");
+    m_ChallengeChooser.addOption("AutoNav - Barrel Racing", "AutoNav - Barrel Racing");
+    m_ChallengeChooser.addOption("AutoNav - Bounce", "AutoNav - Bounce");
+    m_ChallengeChooser.addOption("AutoNav - Slalom", "AutoNav - Slalom");
+
+    //in the parenthesis there is supposed to be (string, command) <-- in our case would it be (string, string)?
+
+    SmartDashboard.putData("Starting Position", m_ChallengeChooser);
   }
 
   /**
@@ -85,24 +100,21 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    var autoVoltageConstraint =
-      new DifferentialDriveVoltageConstraint(
-          new SimpleMotorFeedforward(Constants.DrivetrainConstants.ksVolts,
-                                    Constants.DrivetrainConstants.kvVoltSecondsPerMeter,
-                                    Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter),
-                                    Constants.DrivetrainConstants.kDriveKinematics,
-                                    10);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                            Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Constants.DrivetrainConstants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+    //it says that it should be in here --- the problem is "cant convert string --> command"
+    String challenge = m_ChallengeChooser.getSelected(); 
 
-    String trajectoryJSON = "Galactic_Search_A/PathWeaver/output/Red.wpilib.json";
+    String trajectoryJSON = "";
+    if (challenge == "Galactic Search") {
+      return new GalacticSearch(m_drivetrain, m_intake);
+    } else if (challenge == "AutoNav - Barrel Racing") {
+      trajectoryJSON = "AutoNav/PathWeaver/output/Barrel_Racing.wpilib.json";
+    } else if (challenge == "AutoNav - Bounce") {
+      trajectoryJSON = "AutoNav/PathWeaver/output/Bounce.wpilib.json";
+    } else if (challenge == "AutoNav - Slalom") {
+      trajectoryJSON = "AutoNav/PathWeaver/output/Slalom.wpilib.json";
+    }
+
     Trajectory trajectory = new Trajectory();
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
