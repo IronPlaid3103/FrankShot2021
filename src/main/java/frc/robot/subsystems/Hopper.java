@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.HopperConstants;
+import frc.robot.util.Settings;
 
 public class Hopper extends SubsystemBase {
   private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushless);
@@ -37,5 +38,6 @@ public class Hopper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    _power = Settings.getLiveDouble("Hopper", "Power", Constants.HopperConstants.defaultPower);
   }
 }

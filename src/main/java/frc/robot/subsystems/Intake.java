@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.Settings;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX _intakeMotor = new WPI_TalonSRX(Constants.IntakeConstants.intakeMotor);
@@ -34,6 +35,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    _power = Settings.getLiveDouble("Intake", "Power", Constants.IntakeConstants.defaultPower);
     // This method will be called once per scheduler run
   }
 }

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Shooter.COLOR;
 import frc.robot.util.LIDARLiteV3;
 import frc.robot.util.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,6 +58,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureButtonBindings();
+    loadSettings();
 
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
@@ -91,16 +93,16 @@ public class RobotContainer {
     hopperButton.whileHeld(new HooperGo(m_hopper));
 
     JoystickButton shooterButton1 = new JoystickButton(m_operator, Constants.JoystickConstants.A);
-    shooterButton1.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.greenVelocity)); 
+    shooterButton1.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
 
     JoystickButton shooterButton2 = new JoystickButton(m_operator, Constants.JoystickConstants.Y);
-    shooterButton2.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.yellowVelocity));
+    shooterButton2.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
 
     JoystickButton shooterButton3 = new JoystickButton(m_operator, Constants.JoystickConstants.X);
-    shooterButton3.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.blueVelocity));
+    shooterButton3.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
 
     JoystickButton shooterButton4 = new JoystickButton(m_operator, Constants.JoystickConstants.B);
-    shooterButton4.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, Constants.ShooterConstants.redVelocity));
+    shooterButton4.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
 
     JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT);
     driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
@@ -161,8 +163,12 @@ public class RobotContainer {
   public void loadSettings(){
     m_intake.setPower(Settings.loadDouble("Intake", "Power", Constants.IntakeConstants.defaultPower));
     m_hopper.setPower(Settings.loadDouble("Hopper", "Power", Constants.HopperConstants.defaultPower));
-    m_shooter.setKf(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.kF));
-    m_shooter.setKp(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.kP));
+    m_shooter.setkP(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
+    m_shooter.setkF(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
+    m_shooter.setRedVelocity(Settings.loadDouble("Shooter", "RedVelocity", Constants.ShooterConstants.redVelocity));
+    m_shooter.setBlueVelocity(Settings.loadDouble("Shooter", "BlueVelocity", Constants.ShooterConstants.blueVelocity));
+    m_shooter.setYellowVelocity(Settings.loadDouble("Shooter", "YellowVelocity", Constants.ShooterConstants.yellowVelocity));
+    m_shooter.setGreenVelocity(Settings.loadDouble("Shooter", "GreenVelocity", Constants.ShooterConstants.greenVelocity));
   }
 
   public void saveSettings(){
@@ -170,5 +176,9 @@ public class RobotContainer {
     Settings.saveDouble("Hopper", "Power", m_hopper.getPower());
     Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
     Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
+    Settings.saveDouble("Shooter", "RedVelocity", m_shooter.getRedVelocity());
+    Settings.saveDouble("Shooter", "BlueVelocity", m_shooter.getBlueVelocity());
+    Settings.saveDouble("Shooter", "YellowVelocity", m_shooter.getYellowVelocity());
+    Settings.saveDouble("Shooter", "GreenVelocity", m_shooter.getGreenVelocity());
   }
 }

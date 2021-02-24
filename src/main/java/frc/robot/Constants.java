@@ -88,8 +88,8 @@ public final class Constants {
         public static double yellowVelocity = 5000;
         public static double blueVelocity = 6000;
         public static double redVelocity = 7000;
-        public static final double kP = 0;
-        public static final double kF = 0;
+        public static final double defaultkP = 0;
+        public static final double defaultkF = 0;
     }
 
     public static final class FieldConstants {
@@ -99,5 +99,7 @@ public final class Constants {
     public static final class LimelightConstants {
         public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
         public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly   
+        public static final double aimingTolerance = .2;
+        public static final double kP = 0;
  }
 }

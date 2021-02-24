@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive_Train;
 import frc.robot.util.Limelight;
 
@@ -27,7 +28,7 @@ public class LimelightAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double Kp = -0.1;
+    double kP = -0.1;
     double min_command = 0.05;
 
     double horizontalOffset = _limelight.getHorizontalOffset();
@@ -35,9 +36,9 @@ public class LimelightAim extends CommandBase {
     double steering_rotate = 0.0;
 
     if (horizontalOffset > 1.0) {
-      steering_rotate = Kp * heading_error - min_command;
+      steering_rotate = kP * heading_error - min_command;
     } else if (horizontalOffset < 1.0) {
-      steering_rotate = Kp * heading_error + min_command;
+      steering_rotate = kP * heading_error + min_command;
     }
 
     _driveTrain.drive(0, 0, steering_rotate);
@@ -52,7 +53,7 @@ public class LimelightAim extends CommandBase {
   @Override
   public boolean isFinished() {
     double horizontalOffset = _limelight.getHorizontalOffset();
-    if (Math.abs(horizontalOffset) < .2 && _limelight.isTargetValid()){
+    if (Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid()){
       return true;
     }
     return false;
