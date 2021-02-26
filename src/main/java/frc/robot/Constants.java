@@ -83,7 +83,8 @@ public final class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final int shooterMotor = 7;
+        public static final int shooterMotor1 = 7;
+        public static final int shooterMotor2 = 8;
         public static double greenVelocity = 4000;
         public static double yellowVelocity = 5000;
         public static double blueVelocity = 6000;

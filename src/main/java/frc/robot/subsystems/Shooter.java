@@ -15,7 +15,8 @@ import frc.robot.util.Settings;
 
 public class Shooter extends SubsystemBase {
   public enum COLOR{Red, Yellow, Blue, Green}
-  private final WPI_TalonFX _shooterMotor = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor);
+  private final WPI_TalonFX _shooterMotor1 = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor1);
+  private final WPI_TalonFX _shooterMotor2 = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor2);
   private double _targetRPM;
   private COLOR _color;
 
@@ -26,6 +27,8 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   public Shooter() {
     setDefaultCommand(new RunCommand(this::stop, this));
+    _shooterMotor2.follow(_shooterMotor1);
+    _shooterMotor2.setInverted(true);
   }
 
   public void setTargetRPM (double rpm) {
@@ -53,15 +56,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isAtTargetRPM() {
-    return (Math.abs(_shooterMotor.getClosedLoopError()) <= _targetRPM * .05);
+    return (Math.abs(_shooterMotor1.getClosedLoopError()) <= _targetRPM * .05);
   }
 
   public void shoot() {
-    _shooterMotor.set(ControlMode.Velocity, _targetRPM, DemandType.ArbitraryFeedForward, _kF);
+    _shooterMotor1.set(ControlMode.Velocity, _targetRPM, DemandType.ArbitraryFeedForward, _kF);
   }
 
   public void stop() {
-    _shooterMotor.set(0);
+    _shooterMotor1.set(0);
   }
 
   public void setRedVelocity(double redVelocity){
