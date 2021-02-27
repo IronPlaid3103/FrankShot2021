@@ -71,7 +71,7 @@ public class RobotContainer {
     m_ChallengeChooser.addOption("AutoNav - Barrel Racing", "AutoNav - Barrel Racing");
     m_ChallengeChooser.addOption("AutoNav - Bounce", "AutoNav - Bounce");
     m_ChallengeChooser.addOption("AutoNav - Slalom", "AutoNav - Slalom");
-    m_ChallengeChooser.addOption("test", "test");
+    m_ChallengeChooser.addOption("Test", "Test");
 
     SmartDashboard.putData("Challenge Chooser", m_ChallengeChooser);
   }
