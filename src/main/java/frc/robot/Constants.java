@@ -35,6 +35,8 @@ public final class Constants {
         public static final double kPDriveVel = 8.5;
 
         public static final double rampRate = 0.5;
+		public static final double kDistancePerWheelRevolutionMeters = 0.47877872;
+		public static final double kGearReduction = 10.71;
     }
 
     public static final class AutoConstants{

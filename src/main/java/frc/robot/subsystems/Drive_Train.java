@@ -5,10 +5,10 @@
 package frc.robot.subsystems;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -30,11 +30,8 @@ public class Drive_Train extends SubsystemBase {
   private final MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
   private ADIS16470_IMU _gyro;
 
-  //TODO: We want to use the encoders from the NEO/SparkMax - the motor controller objects above
-  //      have a method to get an encoder (.getEncoder()), but it returns a CANEncoder, so we need
-  //      to determine how to use that (the methods that replace it in all the code below)
-  public Encoder m_left_follower = new Encoder(1, 2);
-  public Encoder m_right_follower = new Encoder(3, 4);
+  private CANEncoder m_left_follower;
+  private CANEncoder m_right_follower;
 
   DifferentialDriveOdometry m_odometry;
 
@@ -46,8 +43,11 @@ public class Drive_Train extends SubsystemBase {
     _gyro = gyro;
     _gyro.reset();
 
-    m_left_follower.setDistancePerPulse(40); // dont know what distance per pulse is
-    m_right_follower.setDistancePerPulse(40);
+    m_left_follower = _frontLeftMotor.getEncoder();
+    m_right_follower = _frontRightMotor.getEncoder();
+
+    m_left_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters * DrivetrainConstants.kGearReduction);
+    m_right_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters * DrivetrainConstants.kGearReduction);
 
     encoderReset();
     
@@ -79,8 +79,8 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void encoderReset() {
-    m_right_follower.reset();
-    m_left_follower.reset();
+    m_right_follower.setPosition(0.0);
+    m_left_follower.setPosition(0.0);
   }
 
   public Pose2d getPose() {
@@ -88,7 +88,7 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_left_follower.getRate(), m_right_follower.getRate());
+    return new DifferentialDriveWheelSpeeds(m_left_follower.getVelocity(), m_right_follower.getVelocity());
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -108,16 +108,9 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public double getAverageEncoderDistance() {
-    return ((m_left_follower.getDistance() + m_right_follower.getDistance()) /2);
+    return ((m_left_follower.getPosition() + m_right_follower.getPosition()) /2);
   }
 
-  public Encoder getLeftEncoder() {
-    return m_left_follower;
-  }
-
-  public Encoder getRightEncoder() {
-    return m_right_follower;
-  }
 
   public void setMaxOutput(double maxOutput) {
     _drive.setMaxOutput(maxOutput);
@@ -140,7 +133,7 @@ public class Drive_Train extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_odometry.update(_gyro.getRotation2d(), m_left_follower.getDistance(), m_right_follower.getDistance());
+    m_odometry.update(_gyro.getRotation2d(), m_left_follower.getPosition(), m_right_follower.getPosition());
     
     double angle = _gyro.getAngle();
     SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
