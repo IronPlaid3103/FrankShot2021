@@ -24,15 +24,15 @@ public final class Constants {
         
         public static final double deadband = .1;
 
-        public static final double ksVolts = 0.22; //put everything with k in settings
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        public static final double ksVolts = 0.146;
+        public static final double kvVoltSecondsPerMeter = 2.675;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.2049;
 
-        public static final double kTrackwidthMeters = 0.69;
+        public static final double kTrackwidthMeters = 0.6096;
         public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
-        public static final double kPDriveVel = 8.5;
+        public static final double kPDriveVel = 2.05;
 
         public static final double rampRate = 0.5;
 		public static final double kDistancePerWheelRevolutionMeters = 0.47877872;
