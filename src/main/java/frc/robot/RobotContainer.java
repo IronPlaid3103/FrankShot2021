@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
@@ -114,6 +116,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
+    return new AutonDriveStraight(m_drivetrain);
+
+    /*
     String challenge = m_ChallengeChooser.getSelected(); 
 
     String trajectoryJSON = "";
@@ -137,6 +142,14 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
 
+    //troubleshooting why the path isnt working (properly)
+    m_drivetrain.encoderReset();
+    m_drivetrain.zeroHeading();
+    m_drivetrain.resetOdometry(new Pose2d());
+    //added these 4 lines
+    */
+
+    /*
     RamseteCommand ramseteCommand = new RamseteCommand(
         trajectory,
         m_drivetrain::getPose,
@@ -152,12 +165,48 @@ public class RobotContainer {
         m_drivetrain::tankDriveVolts,
         m_drivetrain
     );
+    */
+
+    /*
+    RamseteController disabledRamsete = new RamseteController() {
+      @Override
+      public ChassisSpeeds calculate(Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters,
+              double angularVelocityRefRadiansPerSecond) {
+          return new ChassisSpeeds(linearVelocityRefMeters, 0.0, angularVelocityRefRadiansPerSecond);
+      }
+    };
+
+    RamseteCommand ramseteCommand = new RamseteCommand(
+      trajectory,
+      m_drivetrain::getPose,
+      disabledRamsete,
+      new SimpleMotorFeedforward(Constants.DrivetrainConstants.ksVolts,
+        Constants.DrivetrainConstants.kvVoltSecondsPerMeter,
+        Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter),
+      Constants.DrivetrainConstants.kDriveKinematics,
+      m_drivetrain::getWheelSpeeds,
+      new PIDController(0, 0, 0),
+      new PIDController(0, 0, 0),
+      // RamseteCommand passes volts to the callback
+      //m_drivetrain::tankDriveVolts,
+      (leftVolts, rightVolts) -> {
+        m_drivetrain.tankDriveVolts(leftVolts, rightVolts);
+
+        SmartDashboard.putNumber("Left Measurement", m_drivetrain.getWheelSpeeds().leftMetersPerSecond);
+        SmartDashboard.putNumber("Left Reference", m_drivetrain.m_left_follower.getPosition());
+
+        SmartDashboard.putNumber("Right Measurement", m_drivetrain.getWheelSpeeds().rightMetersPerSecond);
+        SmartDashboard.putNumber("Right Reference", m_drivetrain.m_right_follower.getPosition());
+    },
+      m_drivetrain
+  );
 
     // Reset odometry to the starting pose of the trajectory.
     m_drivetrain.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
+    */
   }
 
   public void loadSettings(){

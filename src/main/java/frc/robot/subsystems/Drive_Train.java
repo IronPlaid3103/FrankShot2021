@@ -21,17 +21,23 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.simulation.SimSparkMax;
 
 public class Drive_Train extends SubsystemBase {
-  private final CANSparkMax _frontLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
-  private final CANSparkMax _frontRightMotor = new SimSparkMax(Constants.DrivetrainConstants.frontRightMotor, MotorType.kBrushless);
-  private final CANSparkMax _rearLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.rearLeftMotor, MotorType.kBrushless);
-  private final CANSparkMax _rearRightMotor = new SimSparkMax(Constants.DrivetrainConstants.rearRightMotor, MotorType.kBrushless);
+ // private final CANSparkMax _frontLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
+ // private final CANSparkMax _frontRightMotor = new SimSparkMax(Constants.DrivetrainConstants.frontRightMotor, MotorType.kBrushless);
+ // private final CANSparkMax _rearLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.rearLeftMotor, MotorType.kBrushless);
+ // private final CANSparkMax _rearRightMotor = new SimSparkMax(Constants.DrivetrainConstants.rearRightMotor, MotorType.kBrushless);
+
+  //troubleshooting path following - removed SimSparkMax
+  private final CANSparkMax _frontLeftMotor = new CANSparkMax(Constants.DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax _frontRightMotor = new CANSparkMax(Constants.DrivetrainConstants.frontRightMotor, MotorType.kBrushless);
+  private final CANSparkMax _rearLeftMotor = new CANSparkMax(Constants.DrivetrainConstants.rearLeftMotor, MotorType.kBrushless);
+  private final CANSparkMax _rearRightMotor = new CANSparkMax(Constants.DrivetrainConstants.rearRightMotor, MotorType.kBrushless);
 
 
   private final MecanumDrive _drive = new MecanumDrive(_frontLeftMotor, _rearLeftMotor, _frontRightMotor, _rearRightMotor);
   private ADIS16470_IMU _gyro;
 
-  private CANEncoder m_left_follower;
-  private CANEncoder m_right_follower;
+  public CANEncoder m_left_follower;
+  public CANEncoder m_right_follower;
 
   DifferentialDriveOdometry m_odometry;
 
@@ -101,10 +107,14 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    _frontLeftMotor.setVoltage(leftVolts);
-    _frontRightMotor.setVoltage(rightVolts);
-    _rearRightMotor.setVoltage(rightVolts);
-    _rearLeftMotor.setVoltage(leftVolts);
+    double velocityMultiplier = 0.1;
+    _frontLeftMotor.setVoltage(leftVolts * velocityMultiplier);
+    _frontRightMotor.setVoltage(rightVolts * velocityMultiplier);
+    _rearRightMotor.setVoltage(rightVolts * velocityMultiplier);
+    _rearLeftMotor.setVoltage(leftVolts * velocityMultiplier);
+
+    SmartDashboard.putNumber("leftVolts", leftVolts);
+    SmartDashboard.putNumber("rightVolts", rightVolts);
   }
 
   public double getAverageEncoderDistance() {
@@ -137,5 +147,10 @@ public class Drive_Train extends SubsystemBase {
     
     double angle = _gyro.getAngle();
     SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
+
+    //checking odometry - troubleshooting pathfinding
+    var translation = m_odometry.getPoseMeters().getTranslation();
+    SmartDashboard.putNumber("Odometry X", translation.getX());
+    SmartDashboard.putNumber("Odometry Y", translation.getY());
   }
 }
