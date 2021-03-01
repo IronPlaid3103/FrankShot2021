@@ -71,10 +71,9 @@ public class RobotContainer {
     m_ChallengeChooser.addOption("AutoNav - Barrel Racing", "AutoNav - Barrel Racing");
     m_ChallengeChooser.addOption("AutoNav - Bounce", "AutoNav - Bounce");
     m_ChallengeChooser.addOption("AutoNav - Slalom", "AutoNav - Slalom");
+    m_ChallengeChooser.addOption("Test", "Test");
 
-    //in the parenthesis there is supposed to be (string, command) <-- in our case would it be (string, string)?
-
-    SmartDashboard.putData("Starting Position", m_ChallengeChooser);
+    SmartDashboard.putData("Challenge Chooser", m_ChallengeChooser);
   }
 
   /**
@@ -115,18 +114,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    //it says that it should be in here --- the problem is "cant convert string --> command"
     String challenge = m_ChallengeChooser.getSelected(); 
 
     String trajectoryJSON = "";
     if (challenge == "Galactic Search") {
       return new GalacticSearch(m_drivetrain, m_intake, m_gyro, m_lidar);
     } else if (challenge == "AutoNav - Barrel Racing") {
-      trajectoryJSON = "AutoNav/PathWeaver/output/Barrel_Racing.wpilib.json";
+      trajectoryJSON = "AutoNav--Barrel_Racing/output/AutoNav - Barrel Racing.wpilib.json";
     } else if (challenge == "AutoNav - Bounce") {
-      trajectoryJSON = "AutoNav/PathWeaver/output/Bounce.wpilib.json";
+      trajectoryJSON = "AutoNav--Bounce/output/AutoNav - Bounce.wpilib.json";
     } else if (challenge == "AutoNav - Slalom") {
-      trajectoryJSON = "AutoNav/PathWeaver/output/Slalom.wpilib.json";
+      trajectoryJSON = "AutoNav--Slalom/output/AutoNav - Slalom.wpilib.json";
+    } else if (challenge == "Test") {
+      trajectoryJSON = "AutoNav--Barrel_Racing/output/straight.wpilib.json";
     }
 
     Trajectory trajectory = new Trajectory();
