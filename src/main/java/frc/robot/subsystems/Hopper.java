@@ -27,6 +27,10 @@ public class Hopper extends SubsystemBase {
     _hopperMotor.set(_power);
   }
 
+  public void hopperBack() {
+    _hopperMotor.set(-_power);
+  }
+
   public void setPower(double power){
     _power = power;
   }
