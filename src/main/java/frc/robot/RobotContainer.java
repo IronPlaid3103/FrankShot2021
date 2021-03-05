@@ -85,26 +85,23 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
 
-    JoystickButton intakeButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT);
-    intakeButton.whileHeld(new IntakeIn(m_intake)); 
+    new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new IntakeIn(m_intake)); 
 
-    JoystickButton hopperButton = new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT);
-    hopperButton.whileHeld(new HooperGo(m_hopper));
+    new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_LEFT).whileHeld(new IntakeOut(m_intake)); 
 
-    JoystickButton shooterButton1 = new JoystickButton(m_operator, Constants.JoystickConstants.A);
-    shooterButton1.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
+    new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HooperGo(m_hopper));
 
-    JoystickButton shooterButton2 = new JoystickButton(m_operator, Constants.JoystickConstants.Y);
-    shooterButton2.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
+    new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new HopperBack(m_hopper));
 
-    JoystickButton shooterButton3 = new JoystickButton(m_operator, Constants.JoystickConstants.X);
-    shooterButton3.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
+    new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
 
-    JoystickButton shooterButton4 = new JoystickButton(m_operator, Constants.JoystickConstants.B);
-    shooterButton4.whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
+    new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
 
-    JoystickButton driveRightButton = new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT);
-    driveRightButton.whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
+    new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
+
+    new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
   }
 
   /**
