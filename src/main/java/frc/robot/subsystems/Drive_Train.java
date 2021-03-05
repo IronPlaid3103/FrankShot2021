@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,7 +34,9 @@ public class Drive_Train extends SubsystemBase {
   private CANEncoder m_left_follower;
   private CANEncoder m_right_follower;
 
-  DifferentialDriveOdometry m_odometry;
+  private DifferentialDriveOdometry m_odometry;
+
+  private Pose2d m_pose;
 
   /** Creates a new Drive_Train. */
   public Drive_Train(ADIS16470_IMU gyro) {
@@ -43,15 +46,20 @@ public class Drive_Train extends SubsystemBase {
     _gyro = gyro;
     _gyro.reset();
 
+    _frontLeftMotor.restoreFactoryDefaults();
+    _frontRightMotor.restoreFactoryDefaults();
+    _rearLeftMotor.restoreFactoryDefaults();
+    _rearRightMotor.restoreFactoryDefaults();
+
     m_left_follower = _frontLeftMotor.getEncoder();
     m_right_follower = _frontRightMotor.getEncoder();
 
-    m_left_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters * DrivetrainConstants.kGearReduction);
-    m_right_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters * DrivetrainConstants.kGearReduction);
+    m_left_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters / DrivetrainConstants.kGearReduction);
+    m_right_follower.setPositionConversionFactor(DrivetrainConstants.kDistancePerWheelRevolutionMeters / DrivetrainConstants.kGearReduction);
 
     encoderReset();
     
-    m_odometry = new DifferentialDriveOdometry(_gyro.getRotation2d());
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(_gyro.getAngle()), new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
 
     _frontLeftMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
     _frontRightMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
@@ -84,11 +92,11 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_pose;
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_left_follower.getVelocity(), m_right_follower.getVelocity());
+    return new DifferentialDriveWheelSpeeds(m_left_follower.getVelocity() / 60, -m_right_follower.getVelocity() / 60);
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -96,44 +104,17 @@ public class Drive_Train extends SubsystemBase {
     m_odometry.resetPosition(pose, _gyro.getRotation2d());
   }
 
-  public void arcadeDrive(double xDirection, double yDirection, double rotation) {
-    _drive.driveCartesian(yDirection, xDirection, rotation);
-  }
-
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     _frontLeftMotor.setVoltage(leftVolts);
-    _frontRightMotor.setVoltage(rightVolts);
-    _rearRightMotor.setVoltage(rightVolts);
+    _frontRightMotor.setVoltage(-rightVolts);
+    _rearRightMotor.setVoltage(-rightVolts);
     _rearLeftMotor.setVoltage(leftVolts);
   }
-
-  public double getAverageEncoderDistance() {
-    return ((m_left_follower.getPosition() + m_right_follower.getPosition()) /2);
-  }
-
-
-  public void setMaxOutput(double maxOutput) {
-    _drive.setMaxOutput(maxOutput);
-  }
-
-  public void zeroHeading() {
-    _gyro.reset();
-  }
-
-  public double getHeading() {
-    return _gyro.getRotation2d().getDegrees();
-  }
-
-  public double getTurnRate() {
-    return -_gyro.getRate();
-  }
-
-
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_odometry.update(_gyro.getRotation2d(), m_left_follower.getPosition(), m_right_follower.getPosition());
+    m_pose = m_odometry.update(_gyro.getRotation2d(), m_left_follower.getPosition(), -m_right_follower.getPosition());
     
     double angle = _gyro.getAngle();
     SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);

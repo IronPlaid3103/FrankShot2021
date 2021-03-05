@@ -120,7 +120,7 @@ public class RobotContainer {
     if (challenge == "Galactic Search") {
       return new GalacticSearch(m_drivetrain, m_intake, m_gyro, m_lidar);
     } else if (challenge == "AutoNav - Barrel Racing") {
-      trajectoryJSON = "AutoNav--Barrel_Racing/output/AutoNav - Barrel Racing.wpilib.json";
+      trajectoryJSON = "AutoNav--Barrel_Racing/output/AutoNav--Barrel Racing.wpilib.json";
     } else if (challenge == "AutoNav - Bounce") {
       trajectoryJSON = "AutoNav--Bounce/output/AutoNav - Bounce.wpilib.json";
     } else if (challenge == "AutoNav - Slalom") {
