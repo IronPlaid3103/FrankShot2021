@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -18,9 +19,7 @@ public class Shooter extends SubsystemBase {
   private final WPI_TalonFX _shooterMotor1 = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor1);
   private final WPI_TalonFX _shooterMotor2 = new WPI_TalonFX(Constants.ShooterConstants.shooterMotor2);
   private double _targetRPM;
-  private COLOR _color;
 
-  //TODO: move PIDF values to constants for a default, dashboard for user updates, and persist on the robot using Preferences (PIDF values 2020 code - RobotContainer)
   private double _kF = Constants.ShooterConstants.defaultkF;
   private double _kP = Constants.ShooterConstants.defaultkP;
 
@@ -29,6 +28,11 @@ public class Shooter extends SubsystemBase {
     setDefaultCommand(new RunCommand(this::stop, this));
     _shooterMotor2.follow(_shooterMotor1);
     _shooterMotor2.setInverted(true);
+
+    _shooterMotor1.configFactoryDefault();
+    _shooterMotor1.config_kF(0, _kF);
+    _shooterMotor1.config_kP(0, _kP);
+    _shooterMotor1.setNeutralMode(NeutralMode.Coast);
   }
 
   public void setTargetRPM (double rpm) {
@@ -37,10 +41,12 @@ public class Shooter extends SubsystemBase {
 
   public void setkF(double kF) {
     _kF = kF;
+    _shooterMotor1.config_kF(0, _kF);
   }
 
   public void setkP(double kP) {
     _kP = kP;
+    _shooterMotor1.config_kP(0, _kP);
   }
 
   public double getTargetRPM() {
@@ -60,7 +66,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    _shooterMotor1.set(ControlMode.Velocity, _targetRPM, DemandType.ArbitraryFeedForward, _kF);
+    _shooterMotor1.set(ControlMode.Velocity, _targetRPM);
   }
 
   public void stop() {
@@ -100,14 +106,26 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setColor(COLOR color){
-    _color = color;
+    switch(color){
+      case Red: 
+        _targetRPM = getRedVelocity();
+        break;
+      case Blue: 
+        _targetRPM = getBlueVelocity();
+        break; 
+      case Yellow: 
+        _targetRPM = getYellowVelocity();
+        break;
+      case Green:
+        _targetRPM = getGreenVelocity();
+        break;
+    }
   }
-
 
   @Override
   public void periodic() {
-    _kF = Settings.getLiveDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF);
-    _kP = Settings.getLiveDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP);
+    setkF(Settings.getLiveDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
+    setkP(Settings.getLiveDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
     setRedVelocity(Settings.getLiveDouble("Shooter", "RedVelocity", Constants.ShooterConstants.redVelocity));
     setGreenVelocity(Settings.getLiveDouble("Shooter", "GreenVelocity", Constants.ShooterConstants.greenVelocity));
     setBlueVelocity(Settings.getLiveDouble("Shooter", "BlueVelocity", Constants.ShooterConstants.blueVelocity));

@@ -87,12 +87,12 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int shooterMotor1 = 7;
         public static final int shooterMotor2 = 8;
-        public static double greenVelocity = 4000;
-        public static double yellowVelocity = 5000;
-        public static double blueVelocity = 6000;
-        public static double redVelocity = 7000;
+        public static double greenVelocity = 5000;
+        public static double yellowVelocity = 11000;
+        public static double blueVelocity = 16900;
+        public static double redVelocity = 22800;
         public static final double defaultkP = 0;
-        public static final double defaultkF = 0;
+        public static final double defaultkF = .05;
     }
 
     public static final class FieldConstants {
