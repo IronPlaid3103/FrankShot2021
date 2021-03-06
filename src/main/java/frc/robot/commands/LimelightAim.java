@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive_Train;
@@ -53,7 +54,9 @@ public class LimelightAim extends CommandBase {
   @Override
   public boolean isFinished() {
     double horizontalOffset = _limelight.getHorizontalOffset();
-    if (Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid()){
+    boolean isAimed = Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid();
+    SmartDashboard.putBoolean("isAimed", isAimed);
+    if (isAimed){
       return true;
     }
     return false;

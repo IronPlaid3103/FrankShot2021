@@ -102,6 +102,14 @@ public class RobotContainer {
     new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
 
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Green)); 
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Yellow));
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Blue));
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Red));
   }
 
   /**

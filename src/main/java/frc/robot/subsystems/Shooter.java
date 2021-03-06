@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -130,5 +131,9 @@ public class Shooter extends SubsystemBase {
     setGreenVelocity(Settings.getLiveDouble("Shooter", "GreenVelocity", Constants.ShooterConstants.greenVelocity));
     setBlueVelocity(Settings.getLiveDouble("Shooter", "BlueVelocity", Constants.ShooterConstants.blueVelocity));
     setYellowVelocity(Settings.getLiveDouble("Shooter", "YellowVelocity", Constants.ShooterConstants.yellowVelocity));
+
+    SmartDashboard.putNumber("Shooter.V", _shooterMotor1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter.T", _targetRPM);
+    SmartDashboard.putBoolean("Shooter.AtV", isAtTargetRPM());
   }
 }
