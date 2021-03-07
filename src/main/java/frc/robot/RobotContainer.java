@@ -38,11 +38,6 @@ import frc.robot.util.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final LIDARLiteV3 m_lidar = new LIDARLiteV3(0,0);
   private final Drive_Train m_drivetrain = new Drive_Train(m_gyro);
@@ -71,7 +66,9 @@ public class RobotContainer {
     m_ChallengeChooser.addOption("AutoNav - Barrel Racing", "AutoNav - Barrel Racing");
     m_ChallengeChooser.addOption("AutoNav - Bounce", "AutoNav - Bounce");
     m_ChallengeChooser.addOption("AutoNav - Slalom", "AutoNav - Slalom");
-    m_ChallengeChooser.addOption("Test", "Test");
+    m_ChallengeChooser.addOption("Test-Straight", "Test-Straight");
+    m_ChallengeChooser.addOption("Test-Turn", "Test-Turn");
+    m_ChallengeChooser.addOption("Test-Curve", "Test-Curve");
 
     SmartDashboard.putData("Challenge Chooser", m_ChallengeChooser);
   }
@@ -83,33 +80,27 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
-
+    //OPERATOR
     new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new IntakeIn(m_intake)); 
-
     new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_LEFT).whileHeld(new IntakeOut(m_intake)); 
 
     new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HooperGo(m_hopper));
-
     new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new HopperBack(m_hopper));
 
     new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
-
     new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
-
     new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
-
     new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
 
-    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
+    //DRIVER
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
 
     new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Green)); 
-
     new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Yellow));
-
     new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Blue));
-
     new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Red));
+
+    // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
   }
 
   /**
@@ -132,7 +123,7 @@ public class RobotContainer {
       trajectoryJSON = "Paths/output/AutoNav--Slalom.wpilib.json";
     } else if (challenge == "Test-Straight") {
       trajectoryJSON = "Paths/output/test-straight.wpilib.json";
-    } else if (challenge == "Test-Straight") {
+    } else if (challenge == "Test-Turn") {
       trajectoryJSON = "Paths/output/test-turn.wpilib.json";
     } else if (challenge == "Test-Curve") {
       trajectoryJSON = "Paths/output/test-curve.wpilib.json";

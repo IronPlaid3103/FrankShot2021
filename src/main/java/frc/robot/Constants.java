@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -22,20 +23,19 @@ public final class Constants {
         public static final int rearLeftMotor = 3;
         public static final int rearRightMotor = 4;  
         
-        public static final double deadband = .1;
+        public static final double deadband = 0.1;
 
         public static final double ksVolts = 0.146;
         public static final double kvVoltSecondsPerMeter = 2.675;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2049;
 
-        public static final double kTrackwidthMeters = 0.6096;
-        public static final DifferentialDriveKinematics kDriveKinematics =
-        new DifferentialDriveKinematics(kTrackwidthMeters);
+        public static final double kTrackwidthMeters = Units.inchesToMeters(24);
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-        public static final double kPDriveVel = 2.05;
+        public static final double kPDriveVel = 0;//2.05;
 
         public static final double rampRate = 0.5;
-		public static final double kDistancePerWheelRevolutionMeters = 0.47877872;
+		public static final double kDistancePerWheelRevolutionMeters = Units.inchesToMeters(Math.PI * 6.0);//0.47877872
 		public static final double kGearReduction = 10.71;
     }
 
@@ -76,12 +76,12 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int intakeMotor = 5;
-        public static final double defaultPower = .5;
+        public static final double defaultPower = 0.5;
     }
 
     public static final class HopperConstants {
         public static final int hopperMotor = 6;
-        public static final double defaultPower = .5;
+        public static final double defaultPower = 0.5;
     }
 
     public static final class ShooterConstants {
@@ -92,7 +92,7 @@ public final class Constants {
         public static double blueVelocity = 16900;
         public static double redVelocity = 22800;
         public static final double defaultkP = 0;
-        public static final double defaultkF = .05;
+        public static final double defaultkF = 0.0445;
     }
 
     public static final class FieldConstants {
@@ -102,7 +102,7 @@ public final class Constants {
     public static final class LimelightConstants {
         public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
         public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly   
-        public static final double aimingTolerance = .2;
+        public static final double aimingTolerance = 0.2;
         public static final double kP = 0;
         //test
  }
