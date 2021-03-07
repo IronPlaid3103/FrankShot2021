@@ -125,13 +125,17 @@ public class RobotContainer {
     if (challenge == "Galactic Search") {
       return new GalacticSearch(m_drivetrain, m_intake, m_gyro, m_lidar);
     } else if (challenge == "AutoNav - Barrel Racing") {
-      trajectoryJSON = "AutoNav--Barrel_Racing/output/AutoNav--Barrel Racing.wpilib.json";
+      trajectoryJSON = "Paths/output/AutoNav--Barrel Racing.wpilib.json";
     } else if (challenge == "AutoNav - Bounce") {
-      trajectoryJSON = "AutoNav--Bounce/output/AutoNav - Bounce.wpilib.json";
+      trajectoryJSON = "Paths/output/AutoNav--Bounce.wpilib.json";
     } else if (challenge == "AutoNav - Slalom") {
-      trajectoryJSON = "AutoNav--Slalom/output/AutoNav - Slalom.wpilib.json";
-    } else if (challenge == "Test") {
-      trajectoryJSON = "AutoNav--Barrel_Racing/output/straight.wpilib.json";
+      trajectoryJSON = "Paths/output/AutoNav--Slalom.wpilib.json";
+    } else if (challenge == "Test-Straight") {
+      trajectoryJSON = "Paths/output/test-straight.wpilib.json";
+    } else if (challenge == "Test-Straight") {
+      trajectoryJSON = "Paths/output/test-turn.wpilib.json";
+    } else if (challenge == "Test-Curve") {
+      trajectoryJSON = "Paths/output/test-curve.wpilib.json";
     }
 
     Trajectory trajectory = new Trajectory();

@@ -57,13 +57,13 @@ public class GalacticSearchRamsete extends CommandBase {
     String trajectoryJSON = "";
 
     if (path == "ARed") {
-      trajectoryJSON = "Galactic_Search_A/PathWeaver/output/Red.wpilib.json";
+      trajectoryJSON = "Paths/output/GS_A--Red.wpilib.json";
     } else if (path == "ABlue") {
-      trajectoryJSON = "Galactic_Search_A/PathWeaver/output/Blue.wpilib.json";
+      trajectoryJSON = "Paths/output/GS_A--Blue.wpilib.json";
     } else if (path == "BRed") {
-      trajectoryJSON = "Galactic_Search_B/PathWeaver/output/Red.wpilib.json";
+      trajectoryJSON = "Paths/output/GS_B--Red.wpilib.json";
     } else if (path == "BBlue") {
-      trajectoryJSON = "Galactic_Search_B/PathWeaver/output/Blue.wpilib.json";
+      trajectoryJSON = "Paths/output/GS_B--Blue.wpilib.json";
     }
 
     Trajectory trajectory = new Trajectory();
