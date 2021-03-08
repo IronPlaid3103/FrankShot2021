@@ -169,6 +169,9 @@ public class RobotContainer {
     m_shooter.setBlueVelocity(Settings.loadDouble("Shooter", "BlueVelocity", Constants.ShooterConstants.blueVelocity));
     m_shooter.setYellowVelocity(Settings.loadDouble("Shooter", "YellowVelocity", Constants.ShooterConstants.yellowVelocity));
     m_shooter.setGreenVelocity(Settings.loadDouble("Shooter", "GreenVelocity", Constants.ShooterConstants.greenVelocity));
+    m_drivetrain.setkP(Settings.loadDouble("Limelight", "kP", Constants.LimelightConstants.kP));
+    m_drivetrain.setkI(Settings.loadDouble("Limelight", "kI", Constants.LimelightConstants.kI));
+    m_drivetrain.setkD(Settings.loadDouble("Limelight", "kD", Constants.LimelightConstants.kD));
   }
 
   public void saveSettings(){
@@ -180,5 +183,8 @@ public class RobotContainer {
     Settings.saveDouble("Shooter", "BlueVelocity", m_shooter.getBlueVelocity());
     Settings.saveDouble("Shooter", "YellowVelocity", m_shooter.getYellowVelocity());
     Settings.saveDouble("Shooter", "GreenVelocity", m_shooter.getGreenVelocity());
+    Settings.saveDouble("Limelight", "kP", Constants.LimelightConstants.kP);
+    Settings.saveDouble("Limelight", "kI", Constants.LimelightConstants.kI);
+    Settings.saveDouble("Limelight", "kD", Constants.LimelightConstants.kD);
   }
 }

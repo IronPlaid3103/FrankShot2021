@@ -103,7 +103,9 @@ public final class Constants {
         public static final double mountingHeight = 23;     //TODO: this is a rough estimation using CAD - either calculate this better or use real-world measurement
         public static final double mountingAngle = 26.5;    //this is the angle at which the Limelight mounting plate sits on the shooter assembly   
         public static final double aimingTolerance = 0.2;
-        public static final double kP = 0;
+        public static final double kP = 0.02;
+        public static final double kI = 0;
+        public static final double kD = 0;
         //test
  }
 }

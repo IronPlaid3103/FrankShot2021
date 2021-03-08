@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -13,6 +14,7 @@ import frc.robot.util.Limelight;
 public class LimelightAim extends CommandBase {
   private final Drive_Train _driveTrain;
   private final Limelight _limelight;
+  private PIDController _PID;
   /** Creates a new LimelightAim. */
 
   public LimelightAim(Drive_Train driveTrain, Limelight limelight) {
@@ -24,25 +26,19 @@ public class LimelightAim extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    _PID = new PIDController(_driveTrain.getkP(), _driveTrain.getkI(), _driveTrain.getkD());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double kP = -0.1;
-    double min_command = 0.05;
-
     double horizontalOffset = _limelight.getHorizontalOffset();
-    double heading_error = -horizontalOffset;
-    double steering_rotate = 0.0;
+    double heading_error = _PID.calculate(horizontalOffset, 0);
+    
+    _driveTrain.drive(0, 0, heading_error);
 
-    if (horizontalOffset > 1.0) {
-      steering_rotate = kP * heading_error - min_command;
-    } else if (horizontalOffset < 1.0) {
-      steering_rotate = kP * heading_error + min_command;
-    }
-
-    _driveTrain.drive(0, 0, steering_rotate);
+    SmartDashboard.putNumber("Horizontal Offset", horizontalOffset);
+    SmartDashboard.putNumber("Heading Error", heading_error);
   }
 
   // Called once the command ends or is interrupted.

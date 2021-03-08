@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.simulation.SimSparkMax;
+import frc.robot.util.Settings;
 
 public class Drive_Train extends SubsystemBase {
   private final CANSparkMax _frontLeftMotor = new SimSparkMax(Constants.DrivetrainConstants.frontLeftMotor, MotorType.kBrushless);
@@ -37,6 +38,10 @@ public class Drive_Train extends SubsystemBase {
   private DifferentialDriveOdometry m_odometry;
 
   private Pose2d m_pose;
+
+  private double _kP = Constants.LimelightConstants.kP;
+  private double _kI = Constants.LimelightConstants.kI;
+  private double _kD = Constants.LimelightConstants.kD;
 
   /** Creates a new Drive_Train. */
   public Drive_Train(ADIS16470_IMU gyro) {
@@ -111,12 +116,43 @@ public class Drive_Train extends SubsystemBase {
     _rearLeftMotor.setVoltage(leftVolts);
   }
 
+  public void setkP(double kP){
+    _kP = kP;
+  }
+
+  public void setkI(double kI){
+    _kI = kI;
+  }
+
+  public void setkD(double kD){
+    _kD = kD;
+  }
+
+  public double getkP(){
+    return _kP;
+  }
+
+  public double getkI(){
+    return _kI;
+  }
+
+  public double getkD(){
+    return _kD;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_pose = m_odometry.update(_gyro.getRotation2d(), m_left_follower.getPosition(), -m_right_follower.getPosition());
     
+    setkP(Settings.getLiveDouble("Limelight", "kP", Constants.LimelightConstants.kP));
+    setkI(Settings.getLiveDouble("Limelight", "kI", Constants.LimelightConstants.kI));
+    setkD(Settings.getLiveDouble("Limelight", "kD", Constants.LimelightConstants.kD));
+
     double angle = _gyro.getAngle();
     SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
+    SmartDashboard.putNumber("LimelightkP", _kP);
+    SmartDashboard.putNumber("LimelightkD", _kD);
+    SmartDashboard.putNumber("LimelightkI", _kI);
   }
 }
