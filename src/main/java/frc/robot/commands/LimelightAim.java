@@ -34,8 +34,8 @@ public class LimelightAim extends CommandBase {
   public void execute() {
     double horizontalOffset = _limelight.getHorizontalOffset();
     double heading_error = _PID.calculate(horizontalOffset, 0);
-    
-    _driveTrain.drive(0, 0, heading_error);
+
+    _driveTrain.drive(0, 0, -heading_error);
 
     SmartDashboard.putNumber("Horizontal Offset", horizontalOffset);
     SmartDashboard.putNumber("Heading Error", heading_error);
