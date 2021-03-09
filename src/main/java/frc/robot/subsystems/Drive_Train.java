@@ -151,8 +151,5 @@ public class Drive_Train extends SubsystemBase {
 
     double angle = _gyro.getAngle();
     SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
-    SmartDashboard.putNumber("LimelightkP", _kP);
-    SmartDashboard.putNumber("LimelightkD", _kD);
-    SmartDashboard.putNumber("LimelightkI", _kI);
   }
 }

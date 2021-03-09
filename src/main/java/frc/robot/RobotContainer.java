@@ -185,8 +185,8 @@ public class RobotContainer {
     Settings.saveDouble("Shooter", "BlueVelocity", m_shooter.getBlueVelocity());
     Settings.saveDouble("Shooter", "YellowVelocity", m_shooter.getYellowVelocity());
     Settings.saveDouble("Shooter", "GreenVelocity", m_shooter.getGreenVelocity());
-    Settings.saveDouble("Limelight", "kP", Constants.LimelightConstants.kP);
-    Settings.saveDouble("Limelight", "kI", Constants.LimelightConstants.kI);
-    Settings.saveDouble("Limelight", "kD", Constants.LimelightConstants.kD);
+    Settings.saveDouble("Limelight", "kP", m_drivetrain.getkP());
+    Settings.saveDouble("Limelight", "kI", m_drivetrain.getkI());
+    Settings.saveDouble("Limelight", "kD", m_drivetrain.getkD());
   }
 }

@@ -27,7 +27,8 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     setDefaultCommand(new RunCommand(this::stop, this));
     _shooterMotor2.follow(_shooterMotor1);
-    _shooterMotor2.setInverted(true);
+    _shooterMotor1.setInverted(true);
+    _shooterMotor2.setInverted(false);
 
     _shooterMotor1.configFactoryDefault();
     _shooterMotor1.config_kF(0, _kF);
