@@ -4,12 +4,8 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import com.analog.adis16470.frc.ADIS16470_IMU;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,7 +15,6 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Shooter.COLOR;
@@ -62,15 +57,36 @@ public class RobotContainer {
 
     //setting up SendableChooser
     m_ChallengeChooser = new SendableChooser<>();
-    m_ChallengeChooser.setDefaultOption("Galactic Search", "Galactic Search");
-    m_ChallengeChooser.addOption("AutoNav - Barrel Racing", "AutoNav - Barrel Racing");
+    m_ChallengeChooser.addOption("Galactic Search", "Galactic Search");
+
+    cacheTrajectory("AutoNav - Barrel Racing", "Paths/output/AutoNav--Barrel_Racing.wpilib.json");
     m_ChallengeChooser.addOption("AutoNav - Bounce", "AutoNav - Bounce");
-    m_ChallengeChooser.addOption("AutoNav - Slalom", "AutoNav - Slalom");
-    m_ChallengeChooser.addOption("Test-Straight", "Test-Straight");
-    m_ChallengeChooser.addOption("Test-Turn", "Test-Turn");
-    m_ChallengeChooser.addOption("Test-Curve", "Test-Curve");
+    cacheTrajectory("AutoNav - Slalom", "Paths/output/AutoNav--Slalom.wpilib.json");
+
+    cacheTrajectory("GS A Blue", "Paths/output/GS_A--Blue.wpilib.json");
+    cacheTrajectory("GS A Red", "Paths/output/GS_A--Red.wpilib.json");
+    cacheTrajectory("GS B Blue", "Paths/output/GS_B--Blue.wpilib.json");
+    cacheTrajectory("GS B Red", "Paths/output/GS_B--Red.wpilib.json");
+
+    cacheTrajectory("AutoNav--Bounce0", "Paths/output/AutoNav--Bounce0.wpilib.json");
+    cacheTrajectory("AutoNav--Bounce1", "Paths/output/AutoNav--Bounce1.wpilib.json");
+    cacheTrajectory("AutoNav--Bounce2", "Paths/output/AutoNav--Bounce2.wpilib.json");
+    cacheTrajectory("AutoNav--Bounce3", "Paths/output/AutoNav--Bounce3.wpilib.json");
+
+    cacheTrajectory("Test-Straight", "Paths/output/test-straight.wpilib.json");
+    cacheTrajectory("Test-Turn", "Paths/output/test-turn.wpilib.json");
+    cacheTrajectory("Test-Turn2", "Paths/output/test-turn2.wpilib.json");
+    cacheTrajectory("Test-Curve", "Paths/output/test-curve.wpilib.json");
+    cacheTrajectory("Test-StraightReverse", "Paths/output/test-straightreverse.wpilib.json");
+    
+    m_ChallengeChooser.addOption("Test-Group", "Test-Group");
 
     SmartDashboard.putData("Challenge Chooser", m_ChallengeChooser);
+  }
+
+  private void cacheTrajectory(String key, String trajectoryJson) {
+    m_ChallengeChooser.addOption(key, key);
+    TrajectoryCache.add(key, trajectoryJson);
   }
 
   /**
@@ -91,6 +107,8 @@ public class RobotContainer {
     new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
     new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
     new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
+
+    new JoystickButton(m_operator, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> m_limelight.toggleBypass()));
 
     //DRIVER
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
@@ -114,29 +132,15 @@ public class RobotContainer {
 
     String challenge = m_ChallengeChooser.getSelected(); 
 
-    String trajectoryJSON = "";
+    Trajectory trajectory;
     if (challenge == "Galactic Search") {
       return new GalacticSearch(m_drivetrain, m_intake, m_gyro, m_lidar);
-    } else if (challenge == "AutoNav - Barrel Racing") {
-      trajectoryJSON = "Paths/output/AutoNav--Barrel Racing.wpilib.json";
     } else if (challenge == "AutoNav - Bounce") {
-      trajectoryJSON = "Paths/output/AutoNav--Bounce.wpilib.json";
-    } else if (challenge == "AutoNav - Slalom") {
-      trajectoryJSON = "Paths/output/AutoNav--Slalom.wpilib.json";
-    } else if (challenge == "Test-Straight") {
-      trajectoryJSON = "Paths/output/test-straight.wpilib.json";
-    } else if (challenge == "Test-Turn") {
-      trajectoryJSON = "Paths/output/test-turn.wpilib.json";
-    } else if (challenge == "Test-Curve") {
-      trajectoryJSON = "Paths/output/test-curve.wpilib.json";
-    }
-
-    Trajectory trajectory = new Trajectory();
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+      return new BounceSequence(m_drivetrain);
+    } else if (challenge == "Test-Group") {
+      return new TestGroupSequence(m_drivetrain);
+    } else {
+      trajectory = TrajectoryCache.get(challenge);
     }
 
     RamseteCommand ramseteCommand = new RamseteCommand(
@@ -150,7 +154,6 @@ public class RobotContainer {
         m_drivetrain::getWheelSpeeds,
         new PIDController(Constants.DrivetrainConstants.kPDriveVel, 0, 0),
         new PIDController(Constants.DrivetrainConstants.kPDriveVel, 0, 0),
-        // RamseteCommand passes volts to the callback
         m_drivetrain::tankDriveVolts,
         m_drivetrain
     );

@@ -5,12 +5,15 @@ package frc.robot.util;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class Limelight {
     private NetworkTable _table;
     private NetworkTableEntry _camMode, _ledMode, _pipeline, _tx, _ty, _ta, _tv, _ts, _tl;
+
+    private boolean _bypass = false;
+    public void toggleBypass() { _bypass = !_bypass; }
+    public boolean isBypassed() { return _bypass; }
 
     public Limelight() {
         _table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -54,10 +57,8 @@ public class Limelight {
 
     public double getDistance() {
         double targetAngle = Math.toRadians(Constants.LimelightConstants.mountingAngle + this.getVerticalOffset());
-        SmartDashboard.putNumber("Target Angle", targetAngle);
         double targetHeight = Constants.FieldConstants.targetHeight - Constants.LimelightConstants.mountingHeight;
-        SmartDashboard.putNumber("Target Height", targetHeight);
-        return targetHeight / Math.tan(Math.toRadians(targetAngle));
+        return targetHeight / Math.tan(targetAngle);
     }
 
     public void setLed(String mode) {

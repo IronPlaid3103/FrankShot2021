@@ -28,14 +28,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
      m_robotContainer = new RobotContainer();
-    // m_ChallengeChooser = new SendableChooser<>();
-    // m_ChallengeChooser.setDefaultOption("Galactic Search", "Galactic Search");
-    // m_ChallengeChooser.addOption("AutoNav", "AutoNav");
-    // m_ChallengeChooser.addOption("Hyperdrive", "Hyperdrive" );
-    // m_ChallengeChooser.addOption("Interstellar Accuracy", "Interstellar Accuracy");
-    // m_ChallengeChooser.addOption("Power Port","Power Port");
-
-//    SmartDashboard.putData("Starting Position", m_ChallengeChooser);
   }
   
   /**

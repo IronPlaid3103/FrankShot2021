@@ -106,7 +106,7 @@ public class Drive_Train extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     encoderReset();
-    m_odometry.resetPosition(pose, _gyro.getRotation2d());
+    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(_gyro.getAngle()));
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -143,13 +143,10 @@ public class Drive_Train extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_pose = m_odometry.update(_gyro.getRotation2d(), m_left_follower.getPosition(), -m_right_follower.getPosition());
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(_gyro.getAngle()), m_left_follower.getPosition(), -m_right_follower.getPosition());
     
     setkP(Settings.getLiveDouble("Limelight", "kP", Constants.LimelightConstants.kP));
     setkI(Settings.getLiveDouble("Limelight", "kI", Constants.LimelightConstants.kI));
     setkD(Settings.getLiveDouble("Limelight", "kD", Constants.LimelightConstants.kD));
-
-    double angle = _gyro.getAngle();
-    SmartDashboard.putNumber("gyro", Math.floor(angle * 100)/100);
   }
 }
