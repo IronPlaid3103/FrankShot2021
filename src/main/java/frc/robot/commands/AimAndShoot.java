@@ -16,12 +16,12 @@ import frc.robot.util.Limelight;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimAndShoot extends SequentialCommandGroup {
   /** Creates a new AimAndShoot. */
-  public AimAndShoot(Drive_Train drive, Limelight limelight, Shooter shooter, Hopper hopper) {
+  public AimAndShoot(Drive_Train drive, Limelight limelight, Shooter shooter, Hopper hopper, COLOR color) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new LimelightAim(drive, limelight),
-      new ShootDistance(limelight, shooter, hopper)
+      new ShootDistance(limelight, shooter, hopper, color)
     );
   }
 }

@@ -16,12 +16,15 @@ public class ShootDistance extends CommandBase {
   private final Limelight _limelight;
   private final Shooter _shooter;
   private final Hopper _hopper;
+  private final COLOR _color;
 
-  public ShootDistance(Limelight limelight, Shooter shooter, Hopper hopper) {
+  public ShootDistance(Limelight limelight, Shooter shooter, Hopper hopper, COLOR color) {
     // Use addRequirements() here to declare subsystem dependencies.
     _limelight = limelight;
     _shooter = shooter;
     _hopper = hopper;
+    _color = color;
+    addRequirements(_shooter, _hopper);
   }
 
   // Called when the command is initially scheduled.
@@ -31,26 +34,33 @@ public class ShootDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distance = _limelight.getDistance();
-    if (distance <= 90){
-      _shooter.setColor(COLOR.Green);
-      SmartDashboard.putString("Color", "Green");
-    }
-    else if (distance > 90 && distance <=  150){
-      _shooter.setColor(COLOR.Yellow);
-      SmartDashboard.putString("Color", "Yellow");
-    }
-    else if (distance > 150 && distance <= 210){
-      _shooter.setColor(COLOR.Blue);
-      SmartDashboard.putString("Color", "Blue");
+    if (!_limelight.isBypassed()){
+      double distance = _limelight.getDistance();
+      if (distance <= 90){
+        _shooter.setColor(COLOR.Green);
+        SmartDashboard.putString("Color", "Green");
+      }
+      else if (distance > 90 && distance <=  150){
+        _shooter.setColor(COLOR.Yellow);
+        SmartDashboard.putString("Color", "Yellow");
+      }
+      else if (distance > 150 && distance <= 210){
+        _shooter.setColor(COLOR.Blue);
+        SmartDashboard.putString("Color", "Blue");
+      }
+      else {
+        _shooter.setColor(COLOR.Red);
+        SmartDashboard.putString("Color", "Red");
+      }
+      SmartDashboard.putNumber("Distance", distance);
     }
     else {
-      _shooter.setColor(COLOR.Red);
-      SmartDashboard.putString("Color", "Red");
+      _shooter.setColor(_color);
     }
     _shooter.shoot();
-    _hopper.hopperGo();
-    SmartDashboard.putNumber("Distance", distance);
+    if (_shooter.isAtTargetRPM()){
+      _hopper.hopperGo();
+    }
   }
 
   // Called once the command ends or is interrupted.
