@@ -24,4 +24,8 @@ public class TrajectoryCache {
     public static Trajectory get(String key) {
         return cache.get(key);
     }
+
+    public static void clear() {
+        cache.clear();
+    }
 }

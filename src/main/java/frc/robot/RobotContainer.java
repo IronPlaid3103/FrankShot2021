@@ -56,6 +56,11 @@ public class RobotContainer {
     // m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
 
     //setting up SendableChooser
+    loadChallengeChooser();
+  }
+
+  private void loadChallengeChooser() {
+    TrajectoryCache.clear();
     m_ChallengeChooser = new SendableChooser<>();
     m_ChallengeChooser.addOption("Galactic Search", "Galactic Search");
 
@@ -118,8 +123,9 @@ public class RobotContainer {
     new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Blue));
     new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Red));
 
-    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new LimelightAim(m_drivetrain, m_limelight));
+    new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> loadChallengeChooser()));
 
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new LimelightAim(m_drivetrain, m_limelight));
     // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
   }
 
