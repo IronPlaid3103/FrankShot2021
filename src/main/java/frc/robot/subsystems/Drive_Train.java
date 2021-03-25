@@ -43,6 +43,10 @@ public class Drive_Train extends SubsystemBase {
   private double _kI = Constants.LimelightConstants.kI;
   private double _kD = Constants.LimelightConstants.kD;
 
+  private double _ksVolts = Constants.DrivetrainConstants.ksVolts;
+  private double _kvVoltSecondsPerMeter = Constants.DrivetrainConstants.kvVoltSecondsPerMeter;
+  private double _kaVoltSecondsSquaredPerMeter = Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter;
+
   /** Creates a new Drive_Train. */
   public Drive_Train(ADIS16470_IMU gyro) {
     //Note: the following doesn't seem to work, so we had to add our own deadband function
@@ -140,6 +144,30 @@ public class Drive_Train extends SubsystemBase {
     return _kD;
   }
 
+  public double getkaVoltSecondsSquaredPerMeter() {
+    return _kaVoltSecondsSquaredPerMeter;
+  }
+
+  public double getkvVoltSecondsPerMeter() {
+    return _kvVoltSecondsPerMeter;
+  }
+
+  public double getksVolts(){
+    return _ksVolts;
+  }
+
+  public void setkaVoltSecondsSquaredPerMeter(double kaVoltSecondsSquaredPerMeter) {
+    _kaVoltSecondsSquaredPerMeter = kaVoltSecondsSquaredPerMeter;
+  }
+
+  public void setkvVoltSecondsPerMeter(double kvVoltSecondsPerMeter) {
+    _kvVoltSecondsPerMeter = kvVoltSecondsPerMeter;
+  }
+
+  public void setksVolts(double ksVolts){
+    _ksVolts = ksVolts;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -148,5 +176,9 @@ public class Drive_Train extends SubsystemBase {
     setkP(Settings.getLiveDouble("Limelight", "kP", Constants.LimelightConstants.kP));
     setkI(Settings.getLiveDouble("Limelight", "kI", Constants.LimelightConstants.kI));
     setkD(Settings.getLiveDouble("Limelight", "kD", Constants.LimelightConstants.kD));
+    
+    setksVolts(Settings.getLiveDouble("DriveTrain", "ksVolts", Constants.DrivetrainConstants.ksVolts));
+    setkvVoltSecondsPerMeter(Settings.getLiveDouble("DriveTrain", "kvVoltSecondsPerMeter", Constants.DrivetrainConstants.kvVoltSecondsPerMeter));
+    setkaVoltSecondsSquaredPerMeter(Settings.getLiveDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter));
   }
 }

@@ -32,13 +32,15 @@ public class LimelightAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double horizontalOffset = _limelight.getHorizontalOffset();
-    double heading_error = _PID.calculate(horizontalOffset, 0);
+    if (!_limelight.isBypassed()){
+      double horizontalOffset = _limelight.getHorizontalOffset();
+      double heading_error = _PID.calculate(horizontalOffset, 0);
 
-    _driveTrain.drive(0, 0, -heading_error);
+      _driveTrain.drive(0, 0, -heading_error);
 
-    SmartDashboard.putNumber("Horizontal Offset", horizontalOffset);
-    SmartDashboard.putNumber("Heading Error", heading_error);
+      SmartDashboard.putNumber("Horizontal Offset", horizontalOffset);
+      SmartDashboard.putNumber("Heading Error", heading_error);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +51,9 @@ public class LimelightAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (_limelight.isBypassed()){
+      return true;
+    }
     double horizontalOffset = _limelight.getHorizontalOffset();
     boolean isAimed = Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid();
     SmartDashboard.putBoolean("isAimed", isAimed);

@@ -103,10 +103,10 @@ public class RobotContainer {
     new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HooperGo(m_hopper));
     new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new HopperBack(m_hopper));
 
-    new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper)); 
-    new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
-    new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
-    new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper));
+    new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
+    new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
+    new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
+    new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
 
     new JoystickButton(m_operator, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> m_limelight.toggleBypass()));
 
@@ -168,6 +168,7 @@ public class RobotContainer {
   public void loadSettings(){
     m_intake.setPower(Settings.loadDouble("Intake", "Power", Constants.IntakeConstants.defaultPower));
     m_hopper.setPower(Settings.loadDouble("Hopper", "Power", Constants.HopperConstants.defaultPower));
+    m_hopper.setFeederPower(Settings.getLiveDouble("Hopper", "FeederPower", Constants.HopperConstants.hopperFeederPower));
     m_shooter.setkP(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
     m_shooter.setkF(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
     m_shooter.setRedVelocity(Settings.loadDouble("Shooter", "RedVelocity", Constants.ShooterConstants.redVelocity));
@@ -177,11 +178,15 @@ public class RobotContainer {
     m_drivetrain.setkP(Settings.loadDouble("Limelight", "kP", Constants.LimelightConstants.kP));
     m_drivetrain.setkI(Settings.loadDouble("Limelight", "kI", Constants.LimelightConstants.kI));
     m_drivetrain.setkD(Settings.loadDouble("Limelight", "kD", Constants.LimelightConstants.kD));
+    m_drivetrain.setksVolts(Settings.loadDouble("DriveTrain", "ksVolts", Constants.DrivetrainConstants.ksVolts));
+    m_drivetrain.setkvVoltSecondsPerMeter(Settings.loadDouble("DriveTrain", "kvVoltSecondsPerMeter", Constants.DrivetrainConstants.kvVoltSecondsPerMeter));
+    m_drivetrain.setkaVoltSecondsSquaredPerMeter(Settings.loadDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter));
   }
 
   public void saveSettings(){
     Settings.saveDouble("Intake", "Power", m_intake.getPower());
     Settings.saveDouble("Hopper", "Power", m_hopper.getPower());
+    Settings.saveDouble("Hopper", "FeederPower", m_hopper.getFeederPower());
     Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
     Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
     Settings.saveDouble("Shooter", "RedVelocity", m_shooter.getRedVelocity());
@@ -191,5 +196,8 @@ public class RobotContainer {
     Settings.saveDouble("Limelight", "kP", m_drivetrain.getkP());
     Settings.saveDouble("Limelight", "kI", m_drivetrain.getkI());
     Settings.saveDouble("Limelight", "kD", m_drivetrain.getkD());
+    Settings.saveDouble("DriveTrain", "ksVolts", m_drivetrain.getksVolts());
+    Settings.saveDouble("DriveTrain", "kvVoltsSecondsPerMeter", m_drivetrain.getkvVoltSecondsPerMeter());
+    Settings.saveDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", m_drivetrain.getkaVoltSecondsSquaredPerMeter());
   }
 }
