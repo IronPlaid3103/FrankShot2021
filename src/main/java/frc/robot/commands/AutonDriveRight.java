@@ -10,11 +10,11 @@ import frc.robot.subsystems.Drive_Train;
 import frc.robot.util.LIDARLiteV3;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonDriveRight extends CommandBase {
   private final Drive_Train _drivetrain;
   private Timer _timer = new Timer();
-  private final double kP = 1;
   private ADIS16470_IMU _gyro;
   private LIDARLiteV3 _lidar;
 
@@ -31,14 +31,13 @@ public class AutonDriveRight extends CommandBase {
   public void initialize() {
     _timer.reset();
     _timer.start();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double error = -_gyro.getRate();
-    _drivetrain.drive(0.2, 0, 0 -kP * error);
+    _drivetrain.drive(0.2, 0, 0 -_drivetrain.getDriveRightkP() * error);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +51,7 @@ public class AutonDriveRight extends CommandBase {
   @Override
   public boolean isFinished() {
     double distance = _lidar.getDistanceInches(true);
+    SmartDashboard.putNumber("LIDAR Distance", distance);
     
     String path = "";
 
@@ -64,6 +64,7 @@ public class AutonDriveRight extends CommandBase {
     } else if (distance >= 204 && distance <= 216) {
       path = "BBlue";
     }
+    SmartDashboard.putString("Galactic Search Path", path);
     if (path.length() > 0) {
       NetworkTableInstance.getDefault().getTable("Frank").getEntry("GalacticSearchPath").setString(path);
     }

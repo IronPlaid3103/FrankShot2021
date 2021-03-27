@@ -36,7 +36,12 @@ public final class Constants {
 
         public static final double rampRate = 0.5;
 		public static final double kDistancePerWheelRevolutionMeters = Units.inchesToMeters(Math.PI * 6.0);//0.47877872
-		public static final double kGearReduction = 10.71;
+        public static final double kGearReduction = 10.71;
+        
+        //Galactic Search
+        public static final double kachunkPower = 0.2;
+        public static final double kachunkTime = 0.5;
+        public static final double driveRightkP = 0.005;
     }
 
     public static final class AutoConstants{
@@ -83,7 +88,7 @@ public final class Constants {
         public static final int hopperMotor = 6;
         public static final double defaultPower = 0.5;
         public static final int hopperFeederMotor = 9;
-        public static final double hopperFeederPower = 0.5;
+        public static final double defaultFeederPower = 0.5;
     }
 
     public static final class ShooterConstants {
@@ -108,6 +113,6 @@ public final class Constants {
         public static final double kP = 0.02;
         public static final double kI = 0;
         public static final double kD = 0;
-        //test
- }
+        public static final double kF = 0.025;
+    }
 }

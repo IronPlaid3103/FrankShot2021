@@ -38,21 +38,21 @@ public class ShootDistance extends CommandBase {
       double distance = _limelight.getDistance();
       if (distance <= 90){
         _shooter.setColor(COLOR.Green);
-        SmartDashboard.putString("Color", "Green");
+        SmartDashboard.putString("ShootingZone", "Green");
       }
       else if (distance > 90 && distance <=  150){
         _shooter.setColor(COLOR.Yellow);
-        SmartDashboard.putString("Color", "Yellow");
+        SmartDashboard.putString("ShootingZone", "Yellow");
       }
       else if (distance > 150 && distance <= 210){
         _shooter.setColor(COLOR.Blue);
-        SmartDashboard.putString("Color", "Blue");
+        SmartDashboard.putString("ShootingZone", "Blue");
       }
       else {
         _shooter.setColor(COLOR.Red);
-        SmartDashboard.putString("Color", "Red");
+        SmartDashboard.putString("ShootingZone", "Red");
       }
-      SmartDashboard.putNumber("Distance", distance);
+      SmartDashboard.putNumber("Limelight Distance", distance);
     }
     else {
       _shooter.setColor(_color);

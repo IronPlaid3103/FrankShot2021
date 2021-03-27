@@ -41,6 +41,5 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     _power = Settings.getLiveDouble("Intake", "Power", Constants.IntakeConstants.defaultPower);
-    // This method will be called once per scheduler run
   }
 }

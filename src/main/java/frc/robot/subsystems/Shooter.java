@@ -63,11 +63,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isAtTargetRPM() {
-    return (Math.abs(_shooterMotor1.getClosedLoopError()) <= _targetRPM * .05);
+    return true;//(Math.abs(_shooterMotor1.getClosedLoopError()) <= _targetRPM * .05);
   }
 
   public void shoot() {
-    _shooterMotor1.set(ControlMode.Velocity, _targetRPM);
+    // _shooterMotor1.set(ControlMode.Velocity, _targetRPM);
+    //TODO: velocity control mode not operating as expected; for now, treat the value as a percent output
+    _shooterMotor1.set(_targetRPM);
   }
 
   public void stop() {

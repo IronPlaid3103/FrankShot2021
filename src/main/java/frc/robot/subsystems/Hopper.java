@@ -17,24 +17,24 @@ public class Hopper extends SubsystemBase {
   private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushless);
   private final WPI_TalonFX _hopperFeederMotor = new WPI_TalonFX(HopperConstants.hopperFeederMotor);
   private double _hopperPower = Constants.HopperConstants.defaultPower;
-  private double _hopperFeederPower = Constants.HopperConstants.hopperFeederPower;
+  private double _hopperFeederPower = Constants.HopperConstants.defaultFeederPower;
 
   /** Creates a new Hopper. */
   public Hopper() {}
 
   public void stop() {
     _hopperMotor.stopMotor();
-    _hopperFeederMotor.stopMotor();
+    // _hopperFeederMotor.stopMotor();
   }
 
   public void hopperGo() {
     _hopperMotor.set(_hopperPower);
-    _hopperFeederMotor.set(_hopperFeederPower);
+    // _hopperFeederMotor.set(_hopperFeederPower);
   }
 
   public void hopperBack() {
     _hopperMotor.set(-_hopperPower);
-    _hopperFeederMotor.set(-_hopperFeederPower);
+    // _hopperFeederMotor.set(-_hopperFeederPower);
   }
 
   public void setPower(double power){
@@ -55,8 +55,7 @@ public class Hopper extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     _hopperPower = Settings.getLiveDouble("Hopper", "Power", Constants.HopperConstants.defaultPower);
-    _hopperFeederPower = Settings.getLiveDouble("Hopper", "FeederPower", Constants.HopperConstants.hopperFeederPower);
+    // _hopperFeederPower = Settings.getLiveDouble("Hopper", "FeederPower", Constants.HopperConstants.hopperFeederPower);
   }
 }

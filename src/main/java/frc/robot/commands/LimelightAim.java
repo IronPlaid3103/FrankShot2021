@@ -15,7 +15,8 @@ public class LimelightAim extends CommandBase {
   private final Drive_Train _driveTrain;
   private final Limelight _limelight;
   private PIDController _PID;
-  /** Creates a new LimelightAim. */
+  
+  private int _aimCount = 0;
 
   public LimelightAim(Drive_Train driveTrain, Limelight limelight) {
     _driveTrain = driveTrain;
@@ -32,10 +33,12 @@ public class LimelightAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!_limelight.isBypassed()){
+    if(!_limelight.isBypassed()) {
+      double min_command = _driveTrain.getkF();
       double horizontalOffset = _limelight.getHorizontalOffset();
       double heading_error = _PID.calculate(horizontalOffset, 0);
 
+      if(Math.abs(heading_error) < min_command) heading_error = Math.copySign(min_command, heading_error);
       _driveTrain.drive(0, 0, -heading_error);
 
       SmartDashboard.putNumber("Horizontal Offset", horizontalOffset);
@@ -51,15 +54,17 @@ public class LimelightAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    SmartDashboard.putBoolean("BYPASS", _limelight.isBypassed());
     if (_limelight.isBypassed()){
       return true;
     }
     double horizontalOffset = _limelight.getHorizontalOffset();
-    boolean isAimed = Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid();
-    SmartDashboard.putBoolean("isAimed", isAimed);
-    if (isAimed){
-      return true;
-    }
-    return false;
+    if(Math.abs(horizontalOffset) < Constants.LimelightConstants.aimingTolerance && _limelight.isTargetValid())
+      _aimCount++;
+    else
+      _aimCount = 0;
+
+    SmartDashboard.putBoolean("isAimed", _aimCount >= 5);
+    return (_aimCount >= 5);
   }
 }

@@ -15,24 +15,29 @@ public class Kachunk extends CommandBase {
 
   public Kachunk(Drive_Train drivetrain) {
     _drivetrain = drivetrain;
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    forward = true;
+    _timer.reset();
+    _timer.start();
+    _drivetrain.enableOpenLoopRampRate(false);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (forward){
-      _drivetrain.drive(0, .2, 0);
+    if (forward) {
+      _drivetrain.drive(0, _drivetrain.getKachunkPower(), 0);
     }
-    if (_timer.get() > .5){
+    if (_timer.get() > _drivetrain.getKachunkTime()) {
       forward = false;
     }
-    if (!forward){
-      _drivetrain.drive(0, -.2, 0);
+    if (!forward) {
+      _drivetrain.drive(0, -_drivetrain.getKachunkPower(), 0);
     }
   }
 
@@ -40,12 +45,13 @@ public class Kachunk extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     _drivetrain.drive(0, 0, 0);
+    _drivetrain.enableOpenLoopRampRate(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (_timer.get() > 1){
+    if (_timer.get() > (_drivetrain.getKachunkTime()*2)) {
       return true;
     }
     return false;

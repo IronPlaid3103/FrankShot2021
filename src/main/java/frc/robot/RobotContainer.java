@@ -118,15 +118,18 @@ public class RobotContainer {
     //DRIVER
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
 
+    //the buttons below are generally for testing purposes only
     new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Green)); 
     new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Yellow));
     new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Blue));
     new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Red));
 
-    new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> loadChallengeChooser()));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> loadChallengeChooser()));
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new Kachunk(m_drivetrain));
 
-    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new LimelightAim(m_drivetrain, m_limelight));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new LimelightAim(m_drivetrain, m_limelight));
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new ShootDistance(m_limelight, m_shooter, m_hopper, COLOR.Green));
   }
 
   /**
@@ -174,7 +177,7 @@ public class RobotContainer {
   public void loadSettings(){
     m_intake.setPower(Settings.loadDouble("Intake", "Power", Constants.IntakeConstants.defaultPower));
     m_hopper.setPower(Settings.loadDouble("Hopper", "Power", Constants.HopperConstants.defaultPower));
-    m_hopper.setFeederPower(Settings.getLiveDouble("Hopper", "FeederPower", Constants.HopperConstants.hopperFeederPower));
+    // m_hopper.setFeederPower(Settings.loadDouble("Hopper", "FeederPower", Constants.HopperConstants.defaultFeederPower));
     m_shooter.setkP(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
     m_shooter.setkF(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
     m_shooter.setRedVelocity(Settings.loadDouble("Shooter", "RedVelocity", Constants.ShooterConstants.redVelocity));
@@ -184,15 +187,18 @@ public class RobotContainer {
     m_drivetrain.setkP(Settings.loadDouble("Limelight", "kP", Constants.LimelightConstants.kP));
     m_drivetrain.setkI(Settings.loadDouble("Limelight", "kI", Constants.LimelightConstants.kI));
     m_drivetrain.setkD(Settings.loadDouble("Limelight", "kD", Constants.LimelightConstants.kD));
+    m_drivetrain.setkF(Settings.loadDouble("Limelight", "kF", Constants.LimelightConstants.kF));
     m_drivetrain.setksVolts(Settings.loadDouble("DriveTrain", "ksVolts", Constants.DrivetrainConstants.ksVolts));
     m_drivetrain.setkvVoltSecondsPerMeter(Settings.loadDouble("DriveTrain", "kvVoltSecondsPerMeter", Constants.DrivetrainConstants.kvVoltSecondsPerMeter));
     m_drivetrain.setkaVoltSecondsSquaredPerMeter(Settings.loadDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter));
+    m_drivetrain.setKachunkPower(Settings.loadDouble("Drivetrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
+    m_drivetrain.setDriveRightkP(Settings.loadDouble("Drivetrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
   }
 
   public void saveSettings(){
     Settings.saveDouble("Intake", "Power", m_intake.getPower());
     Settings.saveDouble("Hopper", "Power", m_hopper.getPower());
-    Settings.saveDouble("Hopper", "FeederPower", m_hopper.getFeederPower());
+    // Settings.saveDouble("Hopper", "FeederPower", m_hopper.getFeederPower());
     Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
     Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
     Settings.saveDouble("Shooter", "RedVelocity", m_shooter.getRedVelocity());
@@ -202,8 +208,11 @@ public class RobotContainer {
     Settings.saveDouble("Limelight", "kP", m_drivetrain.getkP());
     Settings.saveDouble("Limelight", "kI", m_drivetrain.getkI());
     Settings.saveDouble("Limelight", "kD", m_drivetrain.getkD());
+    Settings.saveDouble("Limelight", "kF", m_drivetrain.getkF());
     Settings.saveDouble("DriveTrain", "ksVolts", m_drivetrain.getksVolts());
     Settings.saveDouble("DriveTrain", "kvVoltsSecondsPerMeter", m_drivetrain.getkvVoltSecondsPerMeter());
     Settings.saveDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", m_drivetrain.getkaVoltSecondsSquaredPerMeter());
+    Settings.saveDouble("DriveTrain", "KachunkPower", m_drivetrain.getKachunkPower());
+    Settings.saveDouble("DriveTrain", "DriveRightkP", m_drivetrain.getDriveRightkP());
   }
 }

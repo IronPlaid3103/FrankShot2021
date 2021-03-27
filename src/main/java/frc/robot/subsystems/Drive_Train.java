@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -42,10 +41,15 @@ public class Drive_Train extends SubsystemBase {
   private double _kP = Constants.LimelightConstants.kP;
   private double _kI = Constants.LimelightConstants.kI;
   private double _kD = Constants.LimelightConstants.kD;
+  private double _kF = Constants.LimelightConstants.kF;
 
   private double _ksVolts = Constants.DrivetrainConstants.ksVolts;
   private double _kvVoltSecondsPerMeter = Constants.DrivetrainConstants.kvVoltSecondsPerMeter;
   private double _kaVoltSecondsSquaredPerMeter = Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter;
+
+  private double _kachunkPower = Constants.DrivetrainConstants.kachunkPower;
+  private double _kachunkTime = Constants.DrivetrainConstants.kachunkTime;
+  private double _driveRightkP = Constants.DrivetrainConstants.driveRightkP;
 
   /** Creates a new Drive_Train. */
   public Drive_Train(ADIS16470_IMU gyro) {
@@ -70,10 +74,16 @@ public class Drive_Train extends SubsystemBase {
     
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(_gyro.getAngle()), new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
 
-    _frontLeftMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
-    _frontRightMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
-    _rearLeftMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
-    _rearRightMotor.setOpenLoopRampRate(DrivetrainConstants.rampRate);
+    enableOpenLoopRampRate(true);
+  }
+
+  public void enableOpenLoopRampRate(boolean enable) {
+    double rampRate = (enable ? DrivetrainConstants.rampRate : 0.0);
+
+    _frontLeftMotor.setOpenLoopRampRate(rampRate);
+    _frontRightMotor.setOpenLoopRampRate(rampRate);
+    _rearLeftMotor.setOpenLoopRampRate(rampRate);
+    _rearRightMotor.setOpenLoopRampRate(rampRate);
   }
   
   public void teleopDrive(Joystick driver){
@@ -132,6 +142,10 @@ public class Drive_Train extends SubsystemBase {
     _kD = kD;
   }
 
+  public void setkF(double kF){
+    _kF = kF;
+  }
+
   public double getkP(){
     return _kP;
   }
@@ -142,6 +156,10 @@ public class Drive_Train extends SubsystemBase {
 
   public double getkD(){
     return _kD;
+  }
+
+  public double getkF(){
+    return _kF;
   }
 
   public double getkaVoltSecondsSquaredPerMeter() {
@@ -168,6 +186,30 @@ public class Drive_Train extends SubsystemBase {
     _ksVolts = ksVolts;
   }
 
+  public void setKachunkPower(double power) {
+    _kachunkPower = power;
+  }
+
+  public void setKachunkTime(double seconds) {
+    _kachunkTime = seconds;
+  }
+
+  public double getKachunkPower() {
+    return _kachunkPower;
+  }
+
+  public double getKachunkTime() {
+    return _kachunkTime;
+  }
+
+  public void setDriveRightkP(double kP) {
+    _driveRightkP = kP;
+  }
+
+  public double getDriveRightkP() {
+    return _driveRightkP;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -176,9 +218,14 @@ public class Drive_Train extends SubsystemBase {
     setkP(Settings.getLiveDouble("Limelight", "kP", Constants.LimelightConstants.kP));
     setkI(Settings.getLiveDouble("Limelight", "kI", Constants.LimelightConstants.kI));
     setkD(Settings.getLiveDouble("Limelight", "kD", Constants.LimelightConstants.kD));
+    setkF(Settings.getLiveDouble("Limelight", "kF", Constants.LimelightConstants.kF));
     
     setksVolts(Settings.getLiveDouble("DriveTrain", "ksVolts", Constants.DrivetrainConstants.ksVolts));
     setkvVoltSecondsPerMeter(Settings.getLiveDouble("DriveTrain", "kvVoltSecondsPerMeter", Constants.DrivetrainConstants.kvVoltSecondsPerMeter));
     setkaVoltSecondsSquaredPerMeter(Settings.getLiveDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter));
+
+    setKachunkPower(Settings.getLiveDouble("DriveTrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
+    setKachunkTime(Settings.getLiveDouble("DriveTrain", "KachunkTime", Constants.DrivetrainConstants.kachunkTime));
+    setDriveRightkP(Settings.getLiveDouble("DriveTrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
   }
 }

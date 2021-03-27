@@ -17,9 +17,8 @@ public class ShooterGo extends CommandBase {
   /** Creates a new ShooterGo. */
   public ShooterGo(Shooter shooter, Hopper hopper, COLOR color) {
     _shooter = shooter;
-    addRequirements(_shooter);
     _hopper = hopper;
-    addRequirements(_hopper);
+    addRequirements(_shooter, _hopper);
     _color = color;
   }
 
