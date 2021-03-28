@@ -14,22 +14,27 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive_Train;
+import frc.robot.subsystems.Intake;
 import frc.robot.util.TrajectoryCache;
 
 public class GalacticSearchRamsete extends CommandBase {
   private Drive_Train _drivetrain;
+  private Intake _intake;
   private RamseteCommand _ramsete;
 
   /** Creates a new GalacticSearchRamsete. */
-  public GalacticSearchRamsete(Drive_Train drivetrain) {
+  public GalacticSearchRamsete(Drive_Train drivetrain, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     _drivetrain = drivetrain;
-    addRequirements(_drivetrain);
+    _intake = intake;
+    addRequirements(_drivetrain, _intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    _ramsete = null;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,6 +45,7 @@ public class GalacticSearchRamsete extends CommandBase {
       return;
     }
 
+    _intake.intakeIn();
     _ramsete.execute();
   }
 
@@ -48,13 +54,13 @@ public class GalacticSearchRamsete extends CommandBase {
     String path = entry.getString("");
 
     Trajectory trajectory = null;
-    if (path == "ARed") {
+    if (path.equals("ARed")) {
       trajectory = TrajectoryCache.get("GS A Red");
-    } else if (path == "ABlue") {
+    } else if (path.equals("ABlue")) {
       trajectory = TrajectoryCache.get("GS A Blue");
-    } else if (path == "BRed") {
+    } else if (path.equals("BRed")) {
       trajectory = TrajectoryCache.get("GS B Red");
-    } else if (path == "BBlue") {
+    } else if (path.equals("BBlue")) {
       trajectory = TrajectoryCache.get("GS B Blue");
     }
 
@@ -78,6 +84,7 @@ public class GalacticSearchRamsete extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _intake.stop();
     _ramsete.end(interrupted);
   }
 

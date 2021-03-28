@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -57,6 +59,7 @@ public class Drive_Train extends SubsystemBase {
     //_drive.setDeadband(Constants.DrivetrainConstants.deadband);
 
     _gyro = gyro;
+    _gyro.setYawAxis(IMUAxis.kY);
     _gyro.reset();
 
     _frontLeftMotor.restoreFactoryDefaults();
@@ -91,7 +94,8 @@ public class Drive_Train extends SubsystemBase {
     double xSpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y));
     double zRotation = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X));
 
-    _drive.driveCartesian(ySpeed, -xSpeed, zRotation, _gyro.getAngle());
+    double multiplier = .8; 
+    _drive.driveCartesian(ySpeed * multiplier, -xSpeed * multiplier, zRotation * multiplier, _gyro.getAngle());
   }
 
   private double applyDeadband(double value) {
@@ -227,5 +231,7 @@ public class Drive_Train extends SubsystemBase {
     setKachunkPower(Settings.getLiveDouble("DriveTrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
     setKachunkTime(Settings.getLiveDouble("DriveTrain", "KachunkTime", Constants.DrivetrainConstants.kachunkTime));
     setDriveRightkP(Settings.getLiveDouble("DriveTrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
+
+    SmartDashboard.putNumber("gyro", _gyro.getAngle());
   }
 }

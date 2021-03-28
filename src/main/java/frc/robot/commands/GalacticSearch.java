@@ -22,8 +22,7 @@ public class GalacticSearch extends SequentialCommandGroup {
     addCommands(
       new AutonDriveRight(drivetrain, gyro, lidar),
       new Kachunk(drivetrain),
-      new IntakeIn(intake),
-      new GalacticSearchRamsete(drivetrain)
+      new GalacticSearchRamsete(drivetrain, intake)
     );
   }
 }

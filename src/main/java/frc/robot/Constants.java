@@ -25,9 +25,9 @@ public final class Constants {
         
         public static final double deadband = 0.1;
 
-        public static final double ksVolts = 0.146;
-        public static final double kvVoltSecondsPerMeter = 2.675;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2049;
+        public static final double ksVolts = 0.146;//0.292
+        public static final double kvVoltSecondsPerMeter = 2.675;//0.2.85
+        public static final double kaVoltSecondsSquaredPerMeter = 0.2049;//0.0537
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(24);
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
