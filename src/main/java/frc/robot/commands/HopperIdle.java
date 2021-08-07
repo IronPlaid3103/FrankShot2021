@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
 
-public class HooperStop extends CommandBase {
+public class HopperIdle extends CommandBase {
   private final Hopper _hopper;
 
   /** Creates a new HopperStop. */
-  public HooperStop(Hopper hopper) {
+  public HopperIdle(Hopper hopper) {
     _hopper = hopper;
     addRequirements(_hopper);
   }
@@ -24,7 +24,7 @@ public class HooperStop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _hopper.stop();
+    _hopper.idle();
   }
 
   // Called once the command ends or is interrupted.
