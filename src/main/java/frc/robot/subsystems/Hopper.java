@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -15,7 +14,7 @@ import frc.robot.Constants.HopperConstants;
 import frc.robot.util.Settings;
 
 public class Hopper extends SubsystemBase {
-  private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushless);
+  private final CANSparkMax _hopperMotor = new CANSparkMax(HopperConstants.hopperMotor, MotorType.kBrushed);
   // private final WPI_TalonSRX _hopperMotor = new WPI_TalonSRX(HopperConstants.hopperMotor);
   private final CANSparkMax _hopperFeederMotor = new CANSparkMax(HopperConstants.hopperFeederMotor, MotorType.kBrushless);
   private double _hopperPower = Constants.HopperConstants.defaultPower;
