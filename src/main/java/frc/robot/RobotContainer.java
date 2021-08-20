@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Shooter.COLOR;
+import frc.robot.subsystems.ShooterV2.COLOR;
 import frc.robot.util.LIDARLiteV3;
 import frc.robot.util.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,7 +40,7 @@ public class RobotContainer {
   private final Joystick m_operator = new Joystick(1); 
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
-  private final Shooter m_shooter = new Shooter();
+  private final ShooterV2 m_shooter = new ShooterV2();
   private final Limelight m_limelight = new Limelight();
 
   private SendableChooser<String> m_ChallengeChooser = new SendableChooser<String>(); 
@@ -52,8 +52,8 @@ public class RobotContainer {
 
     m_drivetrain.setDefaultCommand(new Robot_Drive(m_drivetrain, m_driver));
     m_intake.setDefaultCommand(new IntakeStop(m_intake)); 
-    m_hopper.setDefaultCommand(new HopperIdle(m_hopper));
-    // m_shooter.setDefaultCommand(new ShooterStop(m_shooter));
+    // m_hopper.setDefaultCommand(new HopperIdle(m_hopper));
+    m_hopper.setDefaultCommand(new HopperStop(m_hopper));
 
     //setting up SendableChooser
     loadChallengeChooser();
@@ -105,13 +105,18 @@ public class RobotContainer {
     new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new IntakeIn(m_intake)); 
     new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_LEFT).whileHeld(new IntakeOut(m_intake)); 
 
-    new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HopperGo(m_hopper));
+    new JoystickButton(m_operator, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HopperIdle(m_hopper));
     new JoystickButton(m_operator, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new HopperBack(m_hopper));
 
-    new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
-    new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
-    new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
-    new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
+    // new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Green)); 
+    // new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Yellow));
+    // new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Blue));
+    // new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new AimAndShoot(m_drivetrain, m_limelight, m_shooter, m_hopper, COLOR.Red));
+
+    new JoystickButton(m_operator, Constants.JoystickConstants.A).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Green)); 
+    new JoystickButton(m_operator, Constants.JoystickConstants.Y).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Yellow));
+    new JoystickButton(m_operator, Constants.JoystickConstants.X).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Blue));
+    new JoystickButton(m_operator, Constants.JoystickConstants.B).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Red));
 
     new JoystickButton(m_operator, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> m_limelight.toggleBypass()));
 
@@ -119,18 +124,18 @@ public class RobotContainer {
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
 
     //the buttons below are generally for testing purposes only
-    // new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Green)); 
-    // new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Yellow));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Blue));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterGo(m_shooter, m_hopper, COLOR.Red));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Green)); 
+    // new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Yellow));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Blue));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Red));
 
-    // // new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new InstantCommand(() -> loadChallengeChooser()));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HopperIdle(m_hopper));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new HopperBack(m_hopper));
+
     // new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new Kachunk(m_drivetrain));
 
     // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new LimelightAim(m_drivetrain, m_limelight));
-    // // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whenPressed(new AutonDriveRight(m_drivetrain, m_gyro, m_lidar));
-    // // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new ShootDistance(m_limelight, m_shooter, m_hopper, COLOR.Green));
-    new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new HopperGo(m_hopper));
+    // new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new ShootDistance(m_limelight, m_shooter, m_hopper, COLOR.Green));
   }
 
   /**
@@ -180,8 +185,8 @@ public class RobotContainer {
     m_hopper.setPower(Settings.loadDouble("Hopper", "Power", Constants.HopperConstants.defaultPower));
     m_hopper.setFeederPower(Settings.loadDouble("Hopper", "FeederPower", Constants.HopperConstants.defaultFeederPower));
     m_hopper.setFeederIdle(Settings.loadDouble("Hopper", "FeederIdle", Constants.HopperConstants.defaultFeederIdle));    
-    m_shooter.setkP(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
-    m_shooter.setkF(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
+    // m_shooter.setkP(Settings.loadDouble("Shooter", "kF", Constants.ShooterConstants.defaultkF));
+    // m_shooter.setkF(Settings.loadDouble("Shooter", "kP", Constants.ShooterConstants.defaultkP));
     m_shooter.setRedVelocity(Settings.loadDouble("Shooter", "RedVelocity", Constants.ShooterConstants.redVelocity));
     m_shooter.setBlueVelocity(Settings.loadDouble("Shooter", "BlueVelocity", Constants.ShooterConstants.blueVelocity));
     m_shooter.setYellowVelocity(Settings.loadDouble("Shooter", "YellowVelocity", Constants.ShooterConstants.yellowVelocity));
@@ -202,8 +207,8 @@ public class RobotContainer {
     Settings.saveDouble("Hopper", "Power", m_hopper.getPower());
     Settings.saveDouble("Hopper", "FeederPower", m_hopper.getFeederPower());
     Settings.saveDouble("Hopper", "FeederIdle", m_hopper.getFeederIdle());
-    Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
-    Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
+    // Settings.saveDouble("Shooter", "kF", m_shooter.getkF());
+    // Settings.saveDouble("Shooter", "kP", m_shooter.getkP());
     Settings.saveDouble("Shooter", "RedVelocity", m_shooter.getRedVelocity());
     Settings.saveDouble("Shooter", "BlueVelocity", m_shooter.getBlueVelocity());
     Settings.saveDouble("Shooter", "YellowVelocity", m_shooter.getYellowVelocity());

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.util.Units;
+import frc.robot.util.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -95,12 +96,17 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int shooterMotor1 = 7;
         public static final int shooterMotor2 = 8;
-        public static double greenVelocity = 5000;
-        public static double yellowVelocity = 11000;
-        public static double blueVelocity = 16900;
-        public static double redVelocity = 22800;
+        public static double greenVelocity = 1500;
+        public static double yellowVelocity = 3000;
+        public static double blueVelocity = 4500;
+        public static double redVelocity = 6000;
+
         public static final double defaultkP = 0;
         public static final double defaultkF = 0.0445;
+
+        public static final int kPIDLoopIdx = 0;
+        public static final int kTimeoutMs = 30;
+        public static final Gains kGains_Velocit  = new Gains(0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
     }
 
     public static final class FieldConstants {
