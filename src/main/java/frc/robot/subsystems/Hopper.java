@@ -22,7 +22,9 @@ public class Hopper extends SubsystemBase {
   private double _hopperFeederIdle = Constants.HopperConstants.defaultFeederIdle;  
 
   /** Creates a new Hopper. */
-  public Hopper() { }
+  public Hopper() {
+    _hopperFeederMotor.setInverted(true);
+  }
 
   public void stop() {
     _hopperMotor.stopMotor();
@@ -73,5 +75,9 @@ public class Hopper extends SubsystemBase {
     _hopperPower = Settings.getLiveDouble("Hopper", "Power", Constants.HopperConstants.defaultPower);
     _hopperFeederPower = Settings.getLiveDouble("Hopper", "FeederPower", Constants.HopperConstants.defaultFeederPower);
     _hopperFeederIdle = Settings.getLiveDouble("Hopper", "FeederIdle", Constants.HopperConstants.defaultFeederIdle);
+
+    double amps = _hopperMotor.getOutputCurrent();
+    SmartDashboard.putNumber("Hopper.Amps", amps);
+    SmartDashboard.putBoolean("HOPPER JAM", (amps > 10));
   }
 }

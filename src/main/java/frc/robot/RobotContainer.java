@@ -124,13 +124,16 @@ public class RobotContainer {
     new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whenPressed(new InstantCommand(() -> m_gyro.reset()));
 
     //the buttons below are generally for testing purposes only
-    // new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Green)); 
-    // new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Yellow));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Blue));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Red));
+    new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new IntakeIn(m_intake)); 
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_LEFT).whileHeld(new IntakeOut(m_intake)); 
 
-    // new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HopperIdle(m_hopper));
-    // new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_LEFT).whileHeld(new HopperBack(m_hopper));
+    new JoystickButton(m_driver, Constants.JoystickConstants.BUMPER_RIGHT).whileHeld(new HopperIdle(m_hopper));
+    new JoystickButton(m_driver, Constants.JoystickConstants.LOGO_RIGHT).whileHeld(new HopperBack(m_hopper));
+
+    new JoystickButton(m_driver, Constants.JoystickConstants.A).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Green)); 
+    new JoystickButton(m_driver, Constants.JoystickConstants.Y).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Yellow));
+    new JoystickButton(m_driver, Constants.JoystickConstants.X).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Blue));
+    new JoystickButton(m_driver, Constants.JoystickConstants.B).whileHeld(new ShooterV2Go(m_shooter, m_hopper, COLOR.Red));
 
     // new JoystickButton(m_driver, Constants.JoystickConstants.LEFT_STICK_BUTTON).whenPressed(new Kachunk(m_drivetrain));
 
