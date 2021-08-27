@@ -52,6 +52,7 @@ public class Drive_Train extends SubsystemBase {
   private double _kachunkPower = Constants.DrivetrainConstants.kachunkPower;
   private double _kachunkTime = Constants.DrivetrainConstants.kachunkTime;
   private double _driveRightkP = Constants.DrivetrainConstants.driveRightkP;
+  private double _nerf = 1.0;
 
   /** Creates a new Drive_Train. */
   public Drive_Train(ADIS16470_IMU gyro) {
@@ -106,7 +107,7 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void drive(double ySpeed, double xSpeed, double zRotation) {
-    _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
+    _drive.driveCartesian(ySpeed * _nerf, -xSpeed * _nerf, zRotation * _nerf);
   }
 
   public void encoderReset() {
@@ -214,6 +215,16 @@ public class Drive_Train extends SubsystemBase {
     return _driveRightkP;
   }
 
+  public void setNerf(double nerf) {
+    if(nerf < 0) nerf = Math.abs(nerf);
+    if(nerf > 1.0) nerf = 1.0;
+    _nerf = nerf;
+  }
+
+  public double getNerf() {
+    return _nerf;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -231,6 +242,8 @@ public class Drive_Train extends SubsystemBase {
     setKachunkPower(Settings.getLiveDouble("DriveTrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
     setKachunkTime(Settings.getLiveDouble("DriveTrain", "KachunkTime", Constants.DrivetrainConstants.kachunkTime));
     setDriveRightkP(Settings.getLiveDouble("DriveTrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
+
+    setNerf(Settings.getLiveDouble("DriveTrain", "Nerf", 1.0));
 
     SmartDashboard.putNumber("gyro", _gyro.getAngle());
   }

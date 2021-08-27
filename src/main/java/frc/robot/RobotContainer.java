@@ -201,8 +201,9 @@ public class RobotContainer {
     m_drivetrain.setksVolts(Settings.loadDouble("DriveTrain", "ksVolts", Constants.DrivetrainConstants.ksVolts));
     m_drivetrain.setkvVoltSecondsPerMeter(Settings.loadDouble("DriveTrain", "kvVoltSecondsPerMeter", Constants.DrivetrainConstants.kvVoltSecondsPerMeter));
     m_drivetrain.setkaVoltSecondsSquaredPerMeter(Settings.loadDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", Constants.DrivetrainConstants.kaVoltSecondsSquaredPerMeter));
-    m_drivetrain.setKachunkPower(Settings.loadDouble("Drivetrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
-    m_drivetrain.setDriveRightkP(Settings.loadDouble("Drivetrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
+    m_drivetrain.setKachunkPower(Settings.loadDouble("DriveTrain", "KachunkPower", Constants.DrivetrainConstants.kachunkPower));
+    m_drivetrain.setDriveRightkP(Settings.loadDouble("DriveTrain", "DriveRightkP", Constants.DrivetrainConstants.driveRightkP));
+    m_drivetrain.setNerf(Settings.loadDouble("DriveTrain", "Nerf", 1.0));
   }
 
   public void saveSettings(){
@@ -225,5 +226,6 @@ public class RobotContainer {
     Settings.saveDouble("DriveTrain", "kaVoltSecondsSquaredPerMeter", m_drivetrain.getkaVoltSecondsSquaredPerMeter());
     Settings.saveDouble("DriveTrain", "KachunkPower", m_drivetrain.getKachunkPower());
     Settings.saveDouble("DriveTrain", "DriveRightkP", m_drivetrain.getDriveRightkP());
+    Settings.saveDouble("DriveTrain", "Nerf", m_drivetrain.getNerf());
   }
 }
