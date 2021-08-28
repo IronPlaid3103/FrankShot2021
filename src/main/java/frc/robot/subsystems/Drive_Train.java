@@ -95,8 +95,8 @@ public class Drive_Train extends SubsystemBase {
     double xSpeed = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.LEFT_STICK_Y));
     double zRotation = applyDeadband(driver.getRawAxis(Constants.JoystickConstants.RIGHT_STICK_X));
 
-    double multiplier = .8; 
-    _drive.driveCartesian(ySpeed * multiplier, -xSpeed * multiplier, zRotation * multiplier, _gyro.getAngle());
+    System.out.println(_nerf);
+    _drive.driveCartesian(ySpeed * _nerf, -xSpeed * _nerf, zRotation * _nerf, _gyro.getAngle());
   }
 
   private double applyDeadband(double value) {
@@ -107,7 +107,7 @@ public class Drive_Train extends SubsystemBase {
   }
 
   public void drive(double ySpeed, double xSpeed, double zRotation) {
-    _drive.driveCartesian(ySpeed * _nerf, -xSpeed * _nerf, zRotation * _nerf);
+    _drive.driveCartesian(ySpeed, -xSpeed, zRotation);
   }
 
   public void encoderReset() {
